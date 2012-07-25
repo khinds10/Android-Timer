@@ -16,7 +16,7 @@
         android:gravity="center" >
 
         <TextView
-            android:id="@+id/textView1"
+            android:id="@+id/mainTimerCount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -25,12 +25,12 @@
             android:textSize="50dp" />
 
         <Button
-            android:id="@+id/button3"
+            android:id="@+id/setButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:background="@drawable/custom_button"
-            android:text="Set" />
+            android:text="@string/set" />
     </LinearLayout>
 
     <LinearLayout
@@ -40,23 +40,23 @@
         android:gravity="center_horizontal" >
 
         <Button
-            android:id="@+id/button4"
+            android:id="@+id/startButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:background="@drawable/custom_button"
             android:padding="10dp"
-            android:text="Start"
+            android:text="@string/start"
             android:width="75dp" />
 
         <Button
-            android:id="@+id/button5"
+            android:id="@+id/stopButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:background="@drawable/custom_button"
             android:padding="10dp"
-            android:text="Stop"
+            android:text="@string/stop"
             android:width="75dp" />
     </LinearLayout>
 
@@ -83,10 +83,10 @@
         android:gravity="center_horizontal" >
 
         <CheckBox
-            android:id="@+id/checkBox1"
+            android:id="@+id/playSoundCheckBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Play Sound" />
+            android:text="@string/play_sound" />
     </LinearLayout>
 
 </LinearLayout>

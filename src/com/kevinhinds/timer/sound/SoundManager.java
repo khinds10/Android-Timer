@@ -25,7 +25,7 @@ public class SoundManager {
 	}
 
 	public void addSound(int Index, int SoundID) {
-		mSoundPoolMap.put(1, mSoundPool.load(mContext, SoundID, 1));
+		mSoundPoolMap.put(Index, mSoundPool.load(mContext, SoundID, 1));
 	}
 
 	public void playSound(int index) {
