@@ -5,9 +5,29 @@
     <string name="title_activity_timer">Timer</string>
     <string name="zero">00:01:00</string>
     <string name="stop">Stop</string>
-	<string name="start">Start</string>
-	<string name="set">Set</string>
-	<string name="play_sound">Play Sound</string>
-	
-	
+    <string name="start">Start</string>
+    <string name="set">Set</string>
+    <string name="play_sound">Clicking Sound</string>
+    <string name="Set_Time">Set Time</string>
+    <string name="Hours">Hours</string>
+    <string name="Minutes">Minutes</string>
+    <string name="zeroInt">0</string>
+    <string name="plus1">+ 1</string>
+    <string name="minus1">- 1</string>
+    <string name="plus5">+ 5</string>
+    <string name="minus5">- 5</string>
+    <string name="Set_Timer">Set Timer</string>
+    <string name="Cancel">Cancel</string>
+    <string name="Presets">Presets</string>
+    <string name="DefaultTimerName">00:01:00 Timer</string>
+    <string name="lessThan">&lt;</string>
+  
+    <string-array name="assetFilesArray">
+        <item>Beef, Pork, Lamb, Mutton, Veal</item>
+        <item>Bread, Pastries, Puddings</item>
+        <item>Game and Poultry</item>
+        <item>Sea Foods</item>
+        <item>Vegetables</item>
+    </string-array>
+
 </resources>

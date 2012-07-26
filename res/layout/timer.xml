@@ -15,6 +15,14 @@
         android:layout_gravity="center_vertical"
         android:gravity="center" >
 
+        <Button
+            android:id="@+id/presetsButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:background="@drawable/custom_button"
+            android:text="@string/Presets" />
+
         <TextView
             android:id="@+id/mainTimerCount"
             android:layout_width="wrap_content"
@@ -58,6 +66,20 @@
             android:padding="10dp"
             android:text="@string/stop"
             android:width="75dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_horizontal" >
+
+        <TextView
+            android:id="@+id/currentTimerName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/DefaultTimerName" />
     </LinearLayout>
 
     <ImageView

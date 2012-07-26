@@ -12,18 +12,21 @@ import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.LinearLayout;
+import android.widget.EditText;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 
 public class TimerActivity extends Activity {
 	private com.kevinhinds.timer.sound.SoundManager mSoundManager;
 	private com.kevinhinds.timer.sound.SoundManager mSoundManagerRinger;
 	private boolean clickSoundPlaying;
 	private CountDownTimer countDownTimer = null;
-	private long resumeMilliseconds = 1000 * 10;
+	private long resumeMilliseconds = 1000 * 60;
+	protected CharSequence hoursRemaining = "0";
+	protected CharSequence minutesRemaining = "0";
 	private boolean timerRunning;
 	private View layout = null;
 	private PopupWindow pw;
@@ -57,19 +60,36 @@ public class TimerActivity extends Activity {
 		Button stopButton = (Button) findViewById(R.id.stopButton);
 		stopButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				if (countDownTimer != null) {
-					countDownTimer.cancel();
-					stopTimer();
-				}
+				shutdownTimer();
 			}
 		});
 
 		Button setButton = (Button) findViewById(R.id.setButton);
 		setButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
+				shutdownTimer();
 				initiatePopupWindow();
 			}
 		});
+
+		Button presetsButton = (Button) findViewById(R.id.presetsButton);
+		presetsButton.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				shutdownTimer();
+				Intent intent = new Intent(TimerActivity.this, RecipeActivity.class);
+				startActivity(intent);
+			}
+		});
+	}
+
+	/**
+	 * if a timer is currently running, shut-er-down
+	 */
+	private void shutdownTimer() {
+		if (countDownTimer != null) {
+			countDownTimer.cancel();
+			stopTimer();
+		}
 	}
 
 	/**
@@ -80,10 +100,7 @@ public class TimerActivity extends Activity {
 		/**
 		 * create a new instance of the Android Countdown timer if another timer is running, cancel it
 		 */
-		if (countDownTimer != null) {
-			countDownTimer.cancel();
-			stopTimer();
-		}
+		shutdownTimer();
 
 		/** the timer is now flagged as running */
 		timerRunning = true;
@@ -122,50 +139,6 @@ public class TimerActivity extends Activity {
 			}
 
 			/**
-			 * get a human readable time value to show to the user for how much time left
-			 * 
-			 * @param millisUntilFinished
-			 * @return human readable time left for the timer
-			 */
-			private String getHumanReadableTimeValue(long millisUntilFinished) {
-				String timerLengthValue = "";
-				String tempValue = "";
-				int secUntilFinished = (int) millisUntilFinished / 1000;
-				int hours = secUntilFinished / 3600;
-				int minutes = (secUntilFinished % 3600) / 60;
-				int seconds = (secUntilFinished % 60);
-
-				if (hours > 0) {
-					tempValue = Integer.toString(hours);
-					if (hours < 10) {
-						tempValue = "0" + tempValue;
-					}
-					timerLengthValue = timerLengthValue + tempValue + ":";
-				} else {
-					timerLengthValue = timerLengthValue + "00:";
-				}
-				if (minutes > 0) {
-					tempValue = Integer.toString(minutes);
-					if (minutes < 10) {
-						tempValue = "0" + tempValue;
-					}
-					timerLengthValue = timerLengthValue + tempValue + ":";
-				} else {
-					timerLengthValue = timerLengthValue + "00:";
-				}
-				if (seconds > 0) {
-					tempValue = Integer.toString(seconds);
-					if (seconds < 10) {
-						tempValue = "0" + tempValue;
-					}
-					timerLengthValue = timerLengthValue + tempValue;
-				} else {
-					timerLengthValue = timerLengthValue + "00";
-				}
-				return timerLengthValue;
-			}
-
-			/**
 			 * timer has finished on its own event
 			 */
 			public void onFinish() {
@@ -175,6 +148,50 @@ public class TimerActivity extends Activity {
 				playRinger();
 			}
 		}.start();
+	}
+
+	/**
+	 * get a human readable time value to show to the user for how much time left
+	 * 
+	 * @param millisUntilFinished
+	 * @return human readable time left for the timer
+	 */
+	private String getHumanReadableTimeValue(long millisUntilFinished) {
+		String timerLengthValue = "";
+		String tempValue = "";
+		int secUntilFinished = (int) millisUntilFinished / 1000;
+		int hours = secUntilFinished / 3600;
+		int minutes = (secUntilFinished % 3600) / 60;
+		int seconds = (secUntilFinished % 60);
+
+		if (hours > 0) {
+			tempValue = Integer.toString(hours);
+			if (hours < 10) {
+				tempValue = "0" + tempValue;
+			}
+			timerLengthValue = timerLengthValue + tempValue + ":";
+		} else {
+			timerLengthValue = timerLengthValue + "00:";
+		}
+		if (minutes > 0) {
+			tempValue = Integer.toString(minutes);
+			if (minutes < 10) {
+				tempValue = "0" + tempValue;
+			}
+			timerLengthValue = timerLengthValue + tempValue + ":";
+		} else {
+			timerLengthValue = timerLengthValue + "00:";
+		}
+		if (seconds > 0) {
+			tempValue = Integer.toString(seconds);
+			if (seconds < 10) {
+				tempValue = "0" + tempValue;
+			}
+			timerLengthValue = timerLengthValue + tempValue;
+		} else {
+			timerLengthValue = timerLengthValue + "00";
+		}
+		return timerLengthValue;
 	}
 
 	/**
@@ -261,10 +278,13 @@ public class TimerActivity extends Activity {
 		int height = displaymetrics.heightPixels;
 		int width = displaymetrics.widthPixels;
 
+		/** reset the hours and minutes remaining */
+		hoursRemaining = "0";
+		minutesRemaining = "0";
+
 		/** adjust the popup WxH */
 		float popupWidth = (float) (width * .75);
 		float popupHeight = (float) (height * .60);
-		//float popupButtonPadding = (float) (height * .38);
 
 		/** We need to get the instance of the LayoutInflater, use the context of this activity */
 		LayoutInflater inflater = (LayoutInflater) TimerActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -275,19 +295,137 @@ public class TimerActivity extends Activity {
 		/** display the popup in the center */
 		pw.showAtLocation(layout, Gravity.CENTER, 0, 0);
 
-		/** customize the button position of the popup based on the height determined from the screen resolution */
-		LinearLayout buttonContainerLayout = (LinearLayout) layout.findViewById(R.id.buttonContainer);
-		//buttonContainerLayout.setPadding(0, ((int) popupButtonPadding), 0, 0);
+		/** setup hoursAmount enabled = false */
+		final EditText hoursAmount = (EditText) layout.findViewById(R.id.hoursAmount);
+		hoursAmount.setEnabled(false);
 
+		/** hours increase 1 click */
+		Button hoursIncreaseButton = (Button) layout.findViewById(R.id.hoursIncreaseButton);
+		hoursIncreaseButton.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				int currentTime = Integer.parseInt((String) hoursAmount.getText().toString());
+				hoursRemaining = TimerActivity.setHours(currentTime, 1);
+				hoursAmount.setText(hoursRemaining);
+			}
+		});
+
+		/** hours decrease -1 click */
+		Button hoursDecreaseButton = (Button) layout.findViewById(R.id.hoursDecreaseButton);
+		hoursDecreaseButton.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				int currentTime = Integer.parseInt((String) hoursAmount.getText().toString());
+				hoursRemaining = TimerActivity.setHours(currentTime, -1);
+				hoursAmount.setText(hoursRemaining);
+
+			}
+		});
+
+		/** setup minutesAmount enabled = false */
+		final EditText minutesAmount = (EditText) layout.findViewById(R.id.minutesAmount);
+		minutesAmount.setEnabled(false);
+
+		/** minutes increase 1 click */
+		Button minutesIncreaseButton = (Button) layout.findViewById(R.id.minutesIncreaseButton);
+		minutesIncreaseButton.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				int currentTime = Integer.parseInt((String) minutesAmount.getText().toString());
+				minutesRemaining = TimerActivity.setMinutes(currentTime, 1);
+				minutesAmount.setText(minutesRemaining);
+			}
+		});
+
+		/** minutes decrease -1 click */
+		Button minutesDecreaseButton = (Button) layout.findViewById(R.id.minutesDecreaseButton);
+		minutesDecreaseButton.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				int currentTime = Integer.parseInt((String) minutesAmount.getText().toString());
+				minutesRemaining = TimerActivity.setMinutes(currentTime, -1);
+				minutesAmount.setText(minutesRemaining);
+			}
+		});
+
+		/** minutes increase 1 click */
+		Button minutesIncreaseButtonPlus5 = (Button) layout.findViewById(R.id.minutesIncreaseButtonPlus5);
+		minutesIncreaseButtonPlus5.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				int currentTime = Integer.parseInt((String) minutesAmount.getText().toString());
+				minutesRemaining = TimerActivity.setMinutes(currentTime, 5);
+				minutesAmount.setText(minutesRemaining);
+			}
+		});
+
+		/** minutes decrease -1 click */
+		Button minutesIncreaseButtonMinus5 = (Button) layout.findViewById(R.id.minutesIncreaseButtonMinus5);
+		minutesIncreaseButtonMinus5.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				int currentTime = Integer.parseInt((String) minutesAmount.getText().toString());
+				minutesRemaining = TimerActivity.setMinutes(currentTime, -5);
+				minutesAmount.setText(minutesRemaining);
+			}
+		});
+
+		Button setButton = (Button) layout.findViewById(R.id.setButton);
+		setButton.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				int hoursRemainingInteger = Integer.parseInt(hoursRemaining.toString());
+				int minRemainingInteger = Integer.parseInt(minutesRemaining.toString());
+				int resumeMillisecondsLeft = (hoursRemainingInteger * 60 * 60 * 1000) + minRemainingInteger * 60 * 1000;
+				resumeMilliseconds = (long) resumeMillisecondsLeft;
+				TextView mainTimerCount = (TextView) findViewById(R.id.mainTimerCount);
+
+				String humanReadableTime = getHumanReadableTimeValue(resumeMilliseconds);
+				mainTimerCount.setText(humanReadableTime);
+
+				TextView currentTimerName = (TextView) findViewById(R.id.currentTimerName);
+				currentTimerName.setText(humanReadableTime + " Timer");
+				pw.dismiss();
+			}
+		});
+
+		/** cancel button to close */
 		Button cancelButton = (Button) layout.findViewById(R.id.cancelButton);
-		cancelButton.setOnClickListener(cancel_button_click_listener);
+		cancelButton.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				pw.dismiss();
+			}
+		});
 	}
 
-	private OnClickListener cancel_button_click_listener = new OnClickListener() {
-		public void onClick(View v) {
-			pw.dismiss();
+	/**
+	 * set the minutes current time by altering the current minutes amount
+	 * 
+	 * @param currentTime
+	 * @param timeChange
+	 * @return
+	 */
+	protected static CharSequence setMinutes(int currentTime, int timeChange) {
+		int returnValue = currentTime + timeChange;
+		if (returnValue > 59) {
+			returnValue = 59;
 		}
-	};
+		if (returnValue < 0) {
+			returnValue = 0;
+		}
+		return (CharSequence) Integer.toString(returnValue);
+	}
+
+	/**
+	 * set the hours current time by altering the current minutes amount
+	 * 
+	 * @param currentTime
+	 * @param timeChange
+	 * @return
+	 */
+	protected static CharSequence setHours(int currentTime, int timeChange) {
+		int returnValue = currentTime + timeChange;
+		if (returnValue > 24) {
+			returnValue = 24;
+		}
+		if (returnValue < 0) {
+			returnValue = 0;
+		}
+		return (CharSequence) Integer.toString(returnValue);
+	}
 
 	@Override
 	/**
