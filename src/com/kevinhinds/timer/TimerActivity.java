@@ -10,9 +10,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.app.Activity;
@@ -24,12 +27,13 @@ public class TimerActivity extends Activity {
 	private com.kevinhinds.timer.sound.SoundManager mSoundManagerRinger;
 	private boolean clickSoundPlaying;
 	private CountDownTimer countDownTimer = null;
-	private long resumeMilliseconds = 1000 * 60;
+	private long resumeMilliseconds = 5000 * 60;
 	protected CharSequence hoursRemaining = "0";
 	protected CharSequence minutesRemaining = "0";
 	private boolean timerRunning;
 	private View layout = null;
 	private PopupWindow pw;
+	private float degreesFrom = 0;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -80,6 +84,33 @@ public class TimerActivity extends Activity {
 				startActivity(intent);
 			}
 		});
+
+		rotateTimer(resumeMilliseconds/1000/60);
+	}
+
+	/**
+	 * rotate the timer to a certain number of minutes
+	 * 
+	 * @param minutesToGo
+	 *            how many minutes to rotate the timer too
+	 */
+	private void rotateTimer(float minutesToGo) {
+
+		/** if over an hour then it's just the remainder on the dial */
+		if (minutesToGo > 60) {
+			minutesToGo = minutesToGo % 360;
+		}
+
+		/** base 60 minutes to degrees */
+		float degreesTo = (int) (minutesToGo / 0.166666667);
+
+		/** rotate the dial to the number of minutes via RotateAnimation */
+		ImageView timerDial = (ImageView) findViewById(R.id.dialImage);
+		RotateAnimation rAnim = new RotateAnimation(degreesFrom, degreesTo, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+		rAnim.setFillAfter(true);
+		rAnim.setDuration(500);
+		timerDial.startAnimation(rAnim);
+		degreesFrom = degreesTo;
 	}
 
 	/**
@@ -136,6 +167,13 @@ public class TimerActivity extends Activity {
 				resumeMilliseconds = millisUntilFinished;
 				TextView mainTimerCount = (TextView) findViewById(R.id.mainTimerCount);
 				mainTimerCount.setText(getHumanReadableTimeValue(millisUntilFinished));
+
+				/** rotate the timer to the time selected */
+				float rotateToTime = (float) millisUntilFinished / 1000 / 60;
+				if (rotateToTime == 1) {
+					rotateToTime = 0;
+				}
+				rotateTimer(rotateToTime);
 			}
 
 			/**
@@ -378,6 +416,9 @@ public class TimerActivity extends Activity {
 
 				TextView currentTimerName = (TextView) findViewById(R.id.currentTimerName);
 				currentTimerName.setText(humanReadableTime + " Timer");
+
+				/** rotate the timer to the time selected */
+				rotateTimer((int) (resumeMillisecondsLeft / 1000 / 60));
 				pw.dismiss();
 			}
 		});

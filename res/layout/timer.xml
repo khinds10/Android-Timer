@@ -82,15 +82,41 @@
             android:text="@string/DefaultTimerName" />
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/timerImage"
-        android:layout_width="fill_parent"
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/timerLayout"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_margin="0dp"
-        android:contentDescription="@string/app_name"
-        android:padding="0dp"
-        android:src="@drawable/timer" />
+        android:minHeight="175dp"
+        android:orientation="vertical" >
+
+        <ImageView
+            android:id="@+id/timerImage"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_margin="0dp"
+            android:contentDescription="@string/app_name"
+            android:padding="0dp"
+            android:src="@drawable/timer" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_horizontal"
+            android:paddingTop="57dp" >
+
+            <ImageView
+                android:id="@+id/dialImage"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_margin="0dp"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/timer_dial" />
+        </LinearLayout>
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -102,6 +128,7 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:background="#EFEFEF"
         android:gravity="center_horizontal" >
 
         <CheckBox
