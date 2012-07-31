@@ -1,13 +1,13 @@
-Clams	Boiled	3 to 5 minutes
-Fish, Shad, Bluefish and Whitefish	Broiled	15 to 30 minutes
-Fish, Slices of Halibut, Salmon or Swordfish	Broiled	12 to 15 minutes
-Fish, Codfish and Haddock, per pound	Boiled	6 minutes
-Fish, Halibut, whole or thick piece, per pound	Boiled	15 minutes
-Fish, Bluefish and Bass, per pound	Boiled	10 minutes
-Fish, Salmon, whole or thick cut, per pound	Boiled	10 to 15 minutes
-Fish, small	Boiled	6 to 10 minutes
-Fish, small	Broiled	5 to 8 minutes
-Fish, whole, as bluefish, salmon, etc.	Baked	1 hour or more
-Small fish and fillets	Baked	20 to 30 minutes
-Lobsters	Boiled	25 to 45 minutes
-Oysters	Boiled	3 to 5 minutes
+Clams	Boiled	3 to 5 minutes	meal
+Fish, Shad, Bluefish and Whitefish	Broiled	15 to 30 minutes	meal
+Fish, Slices of Halibut, Salmon or Swordfish	Broiled	12 to 15 minutes	meal
+Fish, Codfish and Haddock	Boiled	6 minutes	pound
+Fish, Halibut, whole or thick piece	Boiled	15 minutes	pound
+Fish, Bluefish and Bass	Boiled	10 minutes	pound
+Fish, Salmon, whole or thick cut	Boiled	10 to 15 minutes	pound
+Fish, small	Boiled	6 to 10 minutes	meal
+Fish, small	Broiled	5 to 8 minutes	meal
+Fish, whole, as bluefish, salmon, etc.	Baked	1 hours	meal
+Small fish and fillets	Baked	20 to 30 minutes	meal
+Lobsters	Boiled	25 to 45 minutes	meal
+Oysters	Boiled	3 to 5 minutes	meal

@@ -13,9 +13,9 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:background="#931624"
         android:orientation="horizontal"
-        android:padding="10dp" 
-        android:background="#EFEFEF">
+        android:padding="10dp" >
 
         <TextView
             android:id="@+id/textViewBack"
@@ -23,6 +23,7 @@
             android:layout_height="fill_parent"
             android:gravity="center_vertical"
             android:text="@string/lessThan"
+            android:textColor="#FFFFFF"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <ImageView
@@ -39,8 +40,9 @@
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:gravity="center_vertical"
-            android:text="Timer: Select Presets"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+            android:text="Gourmet Timer"
+            android:textColor="#FFFFFF"
+            android:textSize="25dp" />
     </LinearLayout>
 
     <LinearLayout

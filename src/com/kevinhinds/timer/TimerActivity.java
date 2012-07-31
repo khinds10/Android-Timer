@@ -27,7 +27,7 @@ public class TimerActivity extends Activity {
 	private com.kevinhinds.timer.sound.SoundManager mSoundManagerRinger;
 	private boolean clickSoundPlaying;
 	private CountDownTimer countDownTimer = null;
-	private long resumeMilliseconds = 5000 * 60;
+	private long resumeMilliseconds = 0;
 	protected CharSequence hoursRemaining = "0";
 	protected CharSequence minutesRemaining = "0";
 	private boolean timerRunning;
@@ -40,6 +40,25 @@ public class TimerActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.timer);
 
+		try {
+			/** get the searchType from the intent extras */
+			Bundle extras = getIntent().getExtras();
+			int timeInMinutes = extras.getInt("timeInMinutes");
+			String timerTitle = extras.getString("timerTitle");
+			resumeMilliseconds = timeInMinutes * 60 * 1000;
+			
+			String humanReadableTime = getHumanReadableTimeValue(resumeMilliseconds);
+			
+			TextView mainTimerCount = (TextView) findViewById(R.id.mainTimerCount);
+			mainTimerCount.setText(humanReadableTime);
+		
+			TextView currentTimerName = (TextView) findViewById(R.id.currentTimerName);
+			currentTimerName.setText(timerTitle);
+			
+		} catch (Exception e) {
+			resumeMilliseconds = 5000 * 60;
+		}
+		
 		/** setup the clicking sound */
 		setupClickSound();
 
@@ -85,7 +104,7 @@ public class TimerActivity extends Activity {
 			}
 		});
 
-		rotateTimer(resumeMilliseconds/1000/60);
+		rotateTimer(resumeMilliseconds / 1000 / 60);
 	}
 
 	/**
@@ -382,7 +401,7 @@ public class TimerActivity extends Activity {
 			}
 		});
 
-		/** minutes increase 1 click */
+		/** minutes increase 5 click */
 		Button minutesIncreaseButtonPlus5 = (Button) layout.findViewById(R.id.minutesIncreaseButtonPlus5);
 		minutesIncreaseButtonPlus5.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
@@ -392,7 +411,7 @@ public class TimerActivity extends Activity {
 			}
 		});
 
-		/** minutes decrease -1 click */
+		/** minutes decrease -5 click */
 		Button minutesIncreaseButtonMinus5 = (Button) layout.findViewById(R.id.minutesIncreaseButtonMinus5);
 		minutesIncreaseButtonMinus5.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {

@@ -5,37 +5,50 @@
     android:layout_height="fill_parent"
     android:background="@drawable/border_background"
     android:orientation="vertical"
-    android:padding="10dp" >
+    android:padding="2dp" >
 
     <LinearLayout
         android:id="@+id/buttonContainer"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="25dp" >
+        android:background="#931624"
+        android:minHeight="35dp" >
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight=".8"
+            android:padding="5dp"
             android:paddingBottom="15dp"
+            android:paddingRight="10dp"
             android:text="Select from Recipe"
-            android:textColor="#000000"
-            android:textSize="15dp"
-            android:paddingRight="10dp" />
+            android:textColor="#FFFFFF"
+            android:textSize="18dp" />
 
         <Button
             android:id="@+id/cancelButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            android:layout_weight=".2"
             android:background="@drawable/custom_button"
+            android:padding="2dp"
             android:text="@string/Cancel" >
         </Button>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="@drawable/border"
+        android:orientation="vertical" >
     </LinearLayout>
 
     <ScrollView
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/timerLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
         android:layout_weight="1"
         android:orientation="vertical"
         android:scrollbars="vertical" >
@@ -48,5 +61,192 @@
             android:padding="10dp" >
         </LinearLayout>
     </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/recipeFormContainer"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:visibility="gone" >
+
+        <TextView
+            android:id="@+id/textViewTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Title:" />
+
+        <EditText
+            android:id="@+id/editTextTitle"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:singleLine="true" >
+
+            <requestFocus />
+        </EditText>
+
+        <TextView
+            android:id="@+id/textViewStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cooking Style:" />
+
+        <EditText
+            android:id="@+id/editTextStyle"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:singleLine="true" />
+
+        <TextView
+            android:id="@+id/textViewSuggestedTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Suggested Time:" />
+
+        <TextView
+            android:id="@+id/textViewSuggestedTimeValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="12dp"
+            android:textColor="#931624"
+            android:textSize="15dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="5dp"
+            android:text="@string/Hours"
+            android:textColor="#000000"
+            android:textSize="14dp" />
+
+        <EditText
+            android:id="@+id/hoursAmount"
+            android:layout_width="75dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:focusable="false"
+            android:inputType="number"
+            android:text="@string/zeroInt" >
+        </EditText>
+
+        <LinearLayout
+            android:id="@+id/hoursButtonContainer"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" >
+
+            <Button
+                android:id="@+id/hoursIncreaseButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/custom_button"
+                android:text="@string/plus1" />
+
+            <Button
+                android:id="@+id/hoursDecreaseButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/custom_button"
+                android:text="@string/minus1" >
+            </Button>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="5dp"
+            android:text="@string/Minutes"
+            android:textColor="#000000"
+            android:textSize="14dp" />
+
+        <EditText
+            android:id="@+id/minutesAmount"
+            android:layout_width="75dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:focusable="false"
+            android:inputType="number"
+            android:text="@string/zeroInt" >
+        </EditText>
+
+        <LinearLayout
+            android:id="@+id/minutesButtonContainer"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" >
+
+            <Button
+                android:id="@+id/minutesIncreaseButtonPlus5"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_weight="0.2"
+                android:background="@drawable/custom_button"
+                android:text="@string/plus5" />
+
+            <Button
+                android:id="@+id/minutesIncreaseButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_weight="0.2"
+                android:background="@drawable/custom_button"
+                android:text="@string/plus1" />
+
+            <Button
+                android:id="@+id/minutesDecreaseButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_weight="0.2"
+                android:background="@drawable/custom_button"
+                android:text="@string/minus1" />
+
+            <Button
+                android:id="@+id/minutesIncreaseButtonMinus5"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_weight="0.2"
+                android:background="@drawable/custom_button"
+                android:text="@string/minus5" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/buttonContainer"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="5dp" >
+
+            <Button
+                android:id="@+id/SaveButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight=".5"
+                android:background="@drawable/custom_button"
+                android:text="Save &amp; Start New Timer"
+                android:textSize="12dp" />
+
+            <Button
+                android:id="@+id/BackButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight=".5"
+                android:background="@drawable/custom_button"
+                android:text="Back"
+                android:textSize="12dp" />
+        </LinearLayout>
+    </LinearLayout>
 
 </LinearLayout>
