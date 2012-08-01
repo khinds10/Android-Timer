@@ -1,0 +1,8 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/clicking"
+        android:title="Turn on/off clicking"
+        android:icon="@drawable/clicking_on_off" />
+    <item android:id="@+id/chooseAlarm"
+        android:title="Change Timer Alarm"
+        android:icon="@drawable/alarm_sound" />
+</menu>

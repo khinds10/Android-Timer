@@ -2,22 +2,28 @@ package com.kevinhinds.timer;
 
 import com.kevinhinds.timer.sound.SoundManager;
 
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -25,7 +31,8 @@ import android.content.Intent;
 public class TimerActivity extends Activity {
 	private com.kevinhinds.timer.sound.SoundManager mSoundManager;
 	private com.kevinhinds.timer.sound.SoundManager mSoundManagerRinger;
-	private boolean clickSoundPlaying;
+	private boolean clickSoundPlaying = false;
+	private boolean clickSoundShouldPlay = true;
 	private CountDownTimer countDownTimer = null;
 	private long resumeMilliseconds = 0;
 	protected CharSequence hoursRemaining = "0";
@@ -34,6 +41,7 @@ public class TimerActivity extends Activity {
 	private View layout = null;
 	private PopupWindow pw;
 	private float degreesFrom = 0;
+	private Uri chosenRingtone = null;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -46,30 +54,21 @@ public class TimerActivity extends Activity {
 			int timeInMinutes = extras.getInt("timeInMinutes");
 			String timerTitle = extras.getString("timerTitle");
 			resumeMilliseconds = timeInMinutes * 60 * 1000;
-			
+
 			String humanReadableTime = getHumanReadableTimeValue(resumeMilliseconds);
-			
+
 			TextView mainTimerCount = (TextView) findViewById(R.id.mainTimerCount);
 			mainTimerCount.setText(humanReadableTime);
-		
+
 			TextView currentTimerName = (TextView) findViewById(R.id.currentTimerName);
 			currentTimerName.setText(timerTitle);
-			
+
 		} catch (Exception e) {
 			resumeMilliseconds = 5000 * 60;
 		}
-		
+
 		/** setup the clicking sound */
 		setupClickSound();
-
-		/** click the play sound checkBox */
-		CheckBox playSoundCheckBox = (CheckBox) findViewById(R.id.playSoundCheckBox);
-		playSoundCheckBox.setChecked(true);
-		playSoundCheckBox.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				checkPlayClickSound();
-			}
-		});
 
 		/** click the start button */
 		Button startButton = (Button) findViewById(R.id.startButton);
@@ -105,6 +104,44 @@ public class TimerActivity extends Activity {
 		});
 
 		rotateTimer(resumeMilliseconds / 1000 / 60);
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.menu, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.clicking:
+			clickSoundShouldPlay = !clickSoundShouldPlay;
+			checkPlayClickSound();
+			break;
+		case R.id.chooseAlarm:
+			Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
+			intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION);
+			intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, "Select Tone");
+			intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, (CharSequence) null);
+			this.startActivityForResult(intent, 5);
+			break;
+		}
+		return true;
+	}
+
+	@Override
+	protected void onActivityResult(final int requestCode, final int resultCode, final Intent intent) {
+		if (resultCode == Activity.RESULT_OK && requestCode == 5) {
+			Uri uri = intent.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
+			if (uri != null) {
+				chosenRingtone = uri;
+				Toast.makeText(this, "Alarm Sound Updated", Toast.LENGTH_LONG).show();
+			} else {
+				chosenRingtone = null;
+			}
+		}
 	}
 
 	/**
@@ -155,9 +192,8 @@ public class TimerActivity extends Activity {
 		/** the timer is now flagged as running */
 		timerRunning = true;
 
-		/** resume the clicking sound if the box is checked */
-		CheckBox playSoundCheckBox = (CheckBox) findViewById(R.id.playSoundCheckBox);
-		if (playSoundCheckBox.isChecked()) {
+		/** resume the clicking sound if should play sound is true */
+		if (clickSoundShouldPlay) {
 
 			/** there's a bug with Android Sound Manager, create a new thread and 1 second out resume the clicking sound */
 			Thread thread = new Thread() {
@@ -271,7 +307,16 @@ public class TimerActivity extends Activity {
 					}
 				} catch (InterruptedException ex) {
 				}
-				mSoundManagerRinger.playSound(1);
+
+				if (chosenRingtone == null) {
+					mSoundManagerRinger.playSound(1);
+				} else {
+					try {
+						Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), chosenRingtone);
+						r.play();
+					} catch (Exception e) {
+					}
+				}
 			}
 		};
 		thread.start();
@@ -289,6 +334,17 @@ public class TimerActivity extends Activity {
 	 * click the play sound checkBox and deal appropriately
 	 */
 	private void checkPlayClickSound() {
+
+		String OnOff = "OFF";
+		if (clickSoundShouldPlay) {
+			OnOff = "ON";
+		}
+		try {
+			Toast.makeText(this, "Timer Clicking " + OnOff, Toast.LENGTH_SHORT).show();
+		} catch (Exception e) {
+
+		}
+
 		if (clickSoundPlaying) {
 			stopClickSound();
 		} else {

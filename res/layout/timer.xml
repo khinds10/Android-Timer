@@ -72,19 +72,21 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:gravity="center_horizontal" >
+        android:gravity="center_horizontal"
+        android:orientation="vertical" >
 
         <TextView
             android:id="@+id/currentTimerName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:gravity="center_horizontal"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
+            android:gravity="center_horizontal"
+            android:text="@string/DefaultTimerName"
             android:textColor="#931624"
-            android:textStyle="bold"
-            android:text="@string/DefaultTimerName" />
+            android:textSize="20dp"
+            android:textStyle="bold" />
     </LinearLayout>
 
     <RelativeLayout
@@ -122,25 +124,4 @@
                 android:src="@drawable/timer_dial" />
         </LinearLayout>
     </RelativeLayout>
-
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="2dp"
-        android:background="@drawable/border"
-        android:orientation="vertical" >
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="#EFEFEF"
-        android:gravity="center_horizontal" >
-
-        <CheckBox
-            android:id="@+id/playSoundCheckBox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/play_sound" />
-    </LinearLayout>
-
 </LinearLayout>

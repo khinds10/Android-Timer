@@ -55,10 +55,10 @@
 
         <LinearLayout
             android:id="@+id/recipeContainer"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="10dp" >
+            android:paddingLeft="0dp" >
         </LinearLayout>
     </ScrollView>
 
@@ -71,38 +71,29 @@
         android:visibility="gone" >
 
         <TextView
-            android:id="@+id/textViewTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Title:" />
-
-        <EditText
             android:id="@+id/editTextTitle"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:singleLine="true" >
-
-            <requestFocus />
-        </EditText>
+            android:paddingTop="10dp"
+            android:textSize="22dp"
+            android:textStyle="bold" >
+        </TextView>
 
         <TextView
-            android:id="@+id/textViewStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Cooking Style:" />
-
-        <EditText
             android:id="@+id/editTextStyle"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:singleLine="true" />
+            android:paddingBottom="10dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="10dp"
+            android:textSize="20dp" />
 
         <TextView
             android:id="@+id/textViewSuggestedTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingTop="10dp"
             android:text="Suggested Time:" />
 
         <TextView
@@ -117,7 +108,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingTop="5dp"
+            android:paddingTop="10dp"
             android:text="@string/Hours"
             android:textColor="#000000"
             android:textSize="14dp" />
@@ -138,16 +129,6 @@
             android:layout_height="wrap_content" >
 
             <Button
-                android:id="@+id/hoursIncreaseButton"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_weight="1"
-                android:background="@drawable/custom_button"
-                android:text="@string/plus1" />
-
-            <Button
                 android:id="@+id/hoursDecreaseButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -157,6 +138,16 @@
                 android:background="@drawable/custom_button"
                 android:text="@string/minus1" >
             </Button>
+
+            <Button
+                android:id="@+id/hoursIncreaseButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/custom_button"
+                android:text="@string/plus1" />
         </LinearLayout>
 
         <TextView
@@ -183,24 +174,14 @@
             android:layout_height="wrap_content" >
 
             <Button
-                android:id="@+id/minutesIncreaseButtonPlus5"
+                android:id="@+id/minutesIncreaseButtonMinus5"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
                 android:layout_weight="0.2"
                 android:background="@drawable/custom_button"
-                android:text="@string/plus5" />
-
-            <Button
-                android:id="@+id/minutesIncreaseButton"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_weight="0.2"
-                android:background="@drawable/custom_button"
-                android:text="@string/plus1" />
+                android:text="@string/minus5" />
 
             <Button
                 android:id="@+id/minutesDecreaseButton"
@@ -213,21 +194,31 @@
                 android:text="@string/minus1" />
 
             <Button
-                android:id="@+id/minutesIncreaseButtonMinus5"
+                android:id="@+id/minutesIncreaseButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
                 android:layout_weight="0.2"
                 android:background="@drawable/custom_button"
-                android:text="@string/minus5" />
+                android:text="@string/plus1" />
+
+            <Button
+                android:id="@+id/minutesIncreaseButtonPlus5"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_weight="0.2"
+                android:background="@drawable/custom_button"
+                android:text="@string/plus5" />
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/buttonContainer"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="5dp" >
+            android:paddingTop="25dp" >
 
             <Button
                 android:id="@+id/SaveButton"
@@ -235,7 +226,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight=".5"
                 android:background="@drawable/custom_button"
-                android:text="Save &amp; Start New Timer"
+                android:text="Save &amp; Setup New Timer"
                 android:textSize="12dp" />
 
             <Button

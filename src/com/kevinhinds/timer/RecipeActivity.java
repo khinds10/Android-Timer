@@ -5,16 +5,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import android.R.integer;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -37,6 +33,7 @@ public class RecipeActivity extends Activity {
 	ArrayList<String> RowDataValues = new ArrayList<String>();
 	protected CharSequence hoursRemaining = "0";
 	protected CharSequence minutesRemaining = "0";
+	protected int loop = 0;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -107,6 +104,7 @@ public class RecipeActivity extends Activity {
 		/** adjust the popup WxH */
 		float popupWidth = (float) (width * .90);
 		float popupHeight = (float) (height * .90);
+		loop = 0;
 
 		/** We need to get the instance of the LayoutInflater, use the context of this activity */
 		LayoutInflater inflater = (LayoutInflater) RecipeActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -130,7 +128,6 @@ public class RecipeActivity extends Activity {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(is));
 			try {
 				String line;
-				int i = 0;
 				RowDataValues.clear();
 				while ((line = reader.readLine()) != null) {
 
@@ -145,60 +142,21 @@ public class RecipeActivity extends Activity {
 					 * attach to the LinearLayout to add TextViews dynamically via menuValues
 					 */
 					LinearLayout ll = (LinearLayout) layout.findViewById(R.id.recipeContainer);
-					LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+					LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 
 					TextView tvTitle = new TextView(layout.getContext());
-					tvTitle.setId(i);
+					tvTitle.setId(loop);
 					tvTitle.setTextSize(18);
 					CharSequence tvText = "";
 					tvText = (CharSequence) name;
-					tvTitle.setText(tvText);
+					tvTitle.setText(Html.fromHtml("<u>" + tvText + "</u>"));
 					tvTitle.setLayoutParams(lp);
 					tvTitle.setClickable(true);
 					tvTitle.setPadding(5, 10, 0, 10);
+					tvTitle.setContentDescription((CharSequence) Integer.toString(loop));
 					tvTitle.setOnClickListener(new OnClickListener() {
-						public void onClick(View v) {
-							pw.dismiss();
-						}
-					});
-					ll.addView(tvTitle);
 
-					TextView tvDescription = new TextView(layout.getContext());
-					tvDescription.setId(i);
-					tvDescription.setTextSize(15);
-					CharSequence tvTextDesc = "";
-					if (unit.equals("meal")) {
-						tvTextDesc = (CharSequence) style + " : " + time;
-					} else {
-						tvTextDesc = (CharSequence) style + " : " + time + " \n[per: " + unit + "]";
-					}
-					tvDescription.setText(tvTextDesc);
-					tvDescription.setLayoutParams(lp);
-					tvDescription.setClickable(true);
-					tvDescription.setPadding(15, 0, 0, 10);
-					tvDescription.setOnClickListener(new OnClickListener() {
-						public void onClick(View v) {
-							pw.dismiss();
-						}
-					});
-					ll.addView(tvDescription);
-
-					LinearLayout buttonContainer = new LinearLayout(layout.getContext());
-					LinearLayout.LayoutParams buttonContainerLP = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-					buttonContainer.setLayoutParams(buttonContainerLP);
-					buttonContainer.setPadding(5, 0, 0, 10);
-					ll.addView(buttonContainer);
-
-					Button buttonSelect = new Button(layout.getContext());
-					LinearLayout.LayoutParams buttonLP = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-					buttonSelect.setLayoutParams(buttonLP);
-					int imageResource = getResources().getIdentifier("drawable/custom_button", null, getPackageName());
-					Drawable image = getResources().getDrawable(imageResource);
-					buttonSelect.setBackgroundDrawable(image);
-					buttonSelect.setText("Select");
-					buttonSelect.setContentDescription((CharSequence) Integer.toString(i));
-					buttonSelect.setClickable(true);
-					buttonSelect.setOnClickListener(new OnClickListener() {
+						@Override
 						public void onClick(View v) {
 
 							LinearLayout recipeFormContainer = (LinearLayout) layout.findViewById(R.id.recipeFormContainer);
@@ -223,10 +181,10 @@ public class RecipeActivity extends Activity {
 
 							final int timeInMinutes = RecipeActivity.parseSuggestedTime(time);
 
-							EditText editTextTitle = (EditText) layout.findViewById(R.id.editTextTitle);
+							TextView editTextTitle = (TextView) layout.findViewById(R.id.editTextTitle);
 							editTextTitle.setText(name);
 
-							EditText editTextStyle = (EditText) layout.findViewById(R.id.editTextStyle);
+							TextView editTextStyle = (TextView) layout.findViewById(R.id.editTextStyle);
 							editTextStyle.setText(style);
 
 							Button BackButton = (Button) layout.findViewById(R.id.BackButton);
@@ -234,7 +192,6 @@ public class RecipeActivity extends Activity {
 								public void onClick(View v) {
 									LinearLayout recipeFormContainer = (LinearLayout) layout.findViewById(R.id.recipeFormContainer);
 									recipeFormContainer.setVisibility(View.GONE);
-
 									ScrollView timerLayout = (ScrollView) layout.findViewById(R.id.timerLayout);
 									timerLayout.setVisibility(View.VISIBLE);
 								}
@@ -327,14 +284,31 @@ public class RecipeActivity extends Activity {
 							});
 						}
 					});
-					buttonContainer.addView(buttonSelect);
+
+					ll.addView(tvTitle);
+
+					TextView tvDescription = new TextView(layout.getContext());
+					tvDescription.setId(loop);
+					tvDescription.setTextSize(15);
+					CharSequence tvTextDesc = "";
+					if (unit.equals("meal")) {
+						tvTextDesc = (CharSequence) style + " : " + time;
+					} else {
+						tvTextDesc = (CharSequence) style + " : " + time + " \n[per: " + unit + "]";
+					}
+					tvDescription.setText(tvTextDesc);
+					tvDescription.setLayoutParams(lp);
+					tvDescription.setClickable(true);
+					tvDescription.setPadding(15, 0, 0, 10);
+					ll.addView(tvDescription);
 
 					LinearLayout borderSeparator = new LinearLayout(layout.getContext());
 					LinearLayout.LayoutParams borderSeparatorLP = new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, 2);
 					borderSeparator.setLayoutParams(borderSeparatorLP);
 					borderSeparator.setBackgroundResource(getResources().getIdentifier("separator", "drawable", getPackageName()));
+					borderSeparator.setPadding(0, 20, 0, 20);
 					ll.addView(borderSeparator);
-					i++;
+					loop++;
 				}
 			} catch (IOException ex) {
 			} finally {
