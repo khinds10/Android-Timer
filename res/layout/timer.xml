@@ -85,7 +85,8 @@
             android:gravity="center_horizontal"
             android:text="@string/DefaultTimerName"
             android:textColor="#931624"
-            android:textSize="20dp"
+            android:textSize="15dp"
+            android:singleLine="true"
             android:textStyle="bold" />
     </LinearLayout>
 

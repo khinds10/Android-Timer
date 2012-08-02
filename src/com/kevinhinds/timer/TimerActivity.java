@@ -55,7 +55,7 @@ public class TimerActivity extends Activity {
 			String timerTitle = extras.getString("timerTitle");
 			resumeMilliseconds = timeInMinutes * 60 * 1000;
 
-			String humanReadableTime = getHumanReadableTimeValue(resumeMilliseconds);
+			String humanReadableTime = TimeParser.getHumanReadableTimeValue(resumeMilliseconds);
 
 			TextView mainTimerCount = (TextView) findViewById(R.id.mainTimerCount);
 			mainTimerCount.setText(humanReadableTime);
@@ -221,7 +221,7 @@ public class TimerActivity extends Activity {
 			public void onTick(long millisUntilFinished) {
 				resumeMilliseconds = millisUntilFinished;
 				TextView mainTimerCount = (TextView) findViewById(R.id.mainTimerCount);
-				mainTimerCount.setText(getHumanReadableTimeValue(millisUntilFinished));
+				mainTimerCount.setText(TimeParser.getHumanReadableTimeValue(millisUntilFinished));
 
 				/** rotate the timer to the time selected */
 				float rotateToTime = (float) millisUntilFinished / 1000 / 60;
@@ -241,50 +241,6 @@ public class TimerActivity extends Activity {
 				playRinger();
 			}
 		}.start();
-	}
-
-	/**
-	 * get a human readable time value to show to the user for how much time left
-	 * 
-	 * @param millisUntilFinished
-	 * @return human readable time left for the timer
-	 */
-	private String getHumanReadableTimeValue(long millisUntilFinished) {
-		String timerLengthValue = "";
-		String tempValue = "";
-		int secUntilFinished = (int) millisUntilFinished / 1000;
-		int hours = secUntilFinished / 3600;
-		int minutes = (secUntilFinished % 3600) / 60;
-		int seconds = (secUntilFinished % 60);
-
-		if (hours > 0) {
-			tempValue = Integer.toString(hours);
-			if (hours < 10) {
-				tempValue = "0" + tempValue;
-			}
-			timerLengthValue = timerLengthValue + tempValue + ":";
-		} else {
-			timerLengthValue = timerLengthValue + "00:";
-		}
-		if (minutes > 0) {
-			tempValue = Integer.toString(minutes);
-			if (minutes < 10) {
-				tempValue = "0" + tempValue;
-			}
-			timerLengthValue = timerLengthValue + tempValue + ":";
-		} else {
-			timerLengthValue = timerLengthValue + "00:";
-		}
-		if (seconds > 0) {
-			tempValue = Integer.toString(seconds);
-			if (seconds < 10) {
-				tempValue = "0" + tempValue;
-			}
-			timerLengthValue = timerLengthValue + tempValue;
-		} else {
-			timerLengthValue = timerLengthValue + "00";
-		}
-		return timerLengthValue;
 	}
 
 	/**
@@ -417,7 +373,7 @@ public class TimerActivity extends Activity {
 		hoursIncreaseButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				int currentTime = Integer.parseInt((String) hoursAmount.getText().toString());
-				hoursRemaining = TimerActivity.setHours(currentTime, 1);
+				hoursRemaining = TimeParser.setHours(currentTime, 1);
 				hoursAmount.setText(hoursRemaining);
 			}
 		});
@@ -427,7 +383,7 @@ public class TimerActivity extends Activity {
 		hoursDecreaseButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				int currentTime = Integer.parseInt((String) hoursAmount.getText().toString());
-				hoursRemaining = TimerActivity.setHours(currentTime, -1);
+				hoursRemaining = TimeParser.setHours(currentTime, -1);
 				hoursAmount.setText(hoursRemaining);
 
 			}
@@ -442,7 +398,7 @@ public class TimerActivity extends Activity {
 		minutesIncreaseButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				int currentTime = Integer.parseInt((String) minutesAmount.getText().toString());
-				minutesRemaining = TimerActivity.setMinutes(currentTime, 1);
+				minutesRemaining = TimeParser.setMinutes(currentTime, 1);
 				minutesAmount.setText(minutesRemaining);
 			}
 		});
@@ -452,7 +408,7 @@ public class TimerActivity extends Activity {
 		minutesDecreaseButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				int currentTime = Integer.parseInt((String) minutesAmount.getText().toString());
-				minutesRemaining = TimerActivity.setMinutes(currentTime, -1);
+				minutesRemaining = TimeParser.setMinutes(currentTime, -1);
 				minutesAmount.setText(minutesRemaining);
 			}
 		});
@@ -462,7 +418,7 @@ public class TimerActivity extends Activity {
 		minutesIncreaseButtonPlus5.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				int currentTime = Integer.parseInt((String) minutesAmount.getText().toString());
-				minutesRemaining = TimerActivity.setMinutes(currentTime, 5);
+				minutesRemaining = TimeParser.setMinutes(currentTime, 5);
 				minutesAmount.setText(minutesRemaining);
 			}
 		});
@@ -472,7 +428,7 @@ public class TimerActivity extends Activity {
 		minutesIncreaseButtonMinus5.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				int currentTime = Integer.parseInt((String) minutesAmount.getText().toString());
-				minutesRemaining = TimerActivity.setMinutes(currentTime, -5);
+				minutesRemaining = TimeParser.setMinutes(currentTime, -5);
 				minutesAmount.setText(minutesRemaining);
 			}
 		});
@@ -486,7 +442,7 @@ public class TimerActivity extends Activity {
 				resumeMilliseconds = (long) resumeMillisecondsLeft;
 				TextView mainTimerCount = (TextView) findViewById(R.id.mainTimerCount);
 
-				String humanReadableTime = getHumanReadableTimeValue(resumeMilliseconds);
+				String humanReadableTime = TimeParser.getHumanReadableTimeValue(resumeMilliseconds);
 				mainTimerCount.setText(humanReadableTime);
 
 				TextView currentTimerName = (TextView) findViewById(R.id.currentTimerName);
@@ -505,42 +461,6 @@ public class TimerActivity extends Activity {
 				pw.dismiss();
 			}
 		});
-	}
-
-	/**
-	 * set the minutes current time by altering the current minutes amount
-	 * 
-	 * @param currentTime
-	 * @param timeChange
-	 * @return
-	 */
-	protected static CharSequence setMinutes(int currentTime, int timeChange) {
-		int returnValue = currentTime + timeChange;
-		if (returnValue > 59) {
-			returnValue = 59;
-		}
-		if (returnValue < 0) {
-			returnValue = 0;
-		}
-		return (CharSequence) Integer.toString(returnValue);
-	}
-
-	/**
-	 * set the hours current time by altering the current minutes amount
-	 * 
-	 * @param currentTime
-	 * @param timeChange
-	 * @return
-	 */
-	protected static CharSequence setHours(int currentTime, int timeChange) {
-		int returnValue = currentTime + timeChange;
-		if (returnValue > 24) {
-			returnValue = 24;
-		}
-		if (returnValue < 0) {
-			returnValue = 0;
-		}
-		return (CharSequence) Integer.toString(returnValue);
 	}
 
 	@Override
