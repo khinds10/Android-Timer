@@ -12,7 +12,9 @@ import com.kevinhinds.timer.item.Item;
 import com.kevinhinds.timer.item.ItemsDataSource;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -38,8 +40,6 @@ public class RecipeActivity extends Activity {
 	private PopupWindow pw;
 	String[] RowData = null;
 	ArrayList<String> RowDataValues = new ArrayList<String>();
-	protected CharSequence hoursRemaining = "0";
-	protected CharSequence minutesRemaining = "0";
 	protected int loop = 0;
 	private ItemsDataSource itemsDataSource;
 	private int timeInMinutes;
@@ -48,6 +48,7 @@ public class RecipeActivity extends Activity {
 	private String time;
 	private String unit;
 	private List<Item> savedItems;
+	private Item currentItem;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -71,8 +72,8 @@ public class RecipeActivity extends Activity {
 			Item presetItem = iterator.next();
 			TextView tvPreset = new TextView(this);
 			tvPreset.setId((int) presetItem.getId());
-			tvPreset.setTextSize(20);
-			tvPreset.setText((CharSequence) presetItem.getName());
+			tvPreset.setTextSize(15);
+			tvPreset.setText(Html.fromHtml("<b>" + (CharSequence) presetItem.getName() + "</b>"));
 			tvPreset.setLayoutParams(lpPreset);
 			tvPreset.setClickable(true);
 			tvPreset.setPadding(5, 10, 0, 10);
@@ -90,10 +91,11 @@ public class RecipeActivity extends Activity {
 		tvPreset.setText((CharSequence) "Create New Preset...");
 		tvPreset.setLayoutParams(lpPreset);
 		tvPreset.setClickable(true);
+		tvPreset.setId(1000);
 		tvPreset.setPadding(0, 10, 0, 10);
-
 		tvPreset.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
+				initiatePresetPopupWindow(v.getId());
 			}
 		});
 		llPreset.addView(tvPreset);
@@ -161,7 +163,6 @@ public class RecipeActivity extends Activity {
 		/** adjust the popup WxH */
 		float popupWidth = (float) (width * .90);
 		float popupHeight = (float) (height * .90);
-		loop = 0;
 
 		/** We need to get the instance of the LayoutInflater, use the context of this activity */
 		LayoutInflater inflater = (LayoutInflater) RecipeActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -180,8 +181,40 @@ public class RecipeActivity extends Activity {
 			}
 		});
 
-		Item currentItem = itemsDataSource.getById(id);
+		Button DeleteButton = (Button) layout.findViewById(R.id.DeleteButton);
 
+		/** get the current item selected, if a "create new preset..." option is selected, then it's just an empty item */
+		currentItem = new Item();
+		if (id == 1000) {
+			currentItem.setName("");
+			currentItem.setMilliseconds(0);
+			DeleteButton.setVisibility(View.GONE);
+		} else {
+			currentItem = itemsDataSource.getById(id);
+		}
+
+		DeleteButton.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				AlertDialog.Builder builder = new AlertDialog.Builder(RecipeActivity.this);
+				builder.setTitle("Delete Preset");
+				builder.setMessage("Are you sure you want to delete this preset?").setCancelable(false).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						dialog.dismiss();
+						itemsDataSource.deleteItemByName(currentItem.getName());
+						Intent intent = getIntent();
+						finish();
+						startActivity(intent);
+					}
+				}).setNegativeButton("No", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						dialog.cancel();
+					}
+				});
+				builder.setIcon(R.drawable.ic_launcher);
+				AlertDialog alert = builder.create();
+				alert.show();
+			}
+		});
 		final EditText editTextTitle = (EditText) layout.findViewById(R.id.editTextTitle);
 		editTextTitle.setText(currentItem.getName());
 
@@ -199,7 +232,7 @@ public class RecipeActivity extends Activity {
 		hoursIncreaseButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				int currentTime = Integer.parseInt((String) hoursAmount.getText().toString());
-				hoursRemaining = TimeParser.setHours(currentTime, 1);
+				CharSequence hoursRemaining = TimeParser.setHours(currentTime, 1);
 				hoursAmount.setText(hoursRemaining);
 			}
 		});
@@ -209,9 +242,8 @@ public class RecipeActivity extends Activity {
 		hoursDecreaseButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				int currentTime = Integer.parseInt((String) hoursAmount.getText().toString());
-				hoursRemaining = TimeParser.setHours(currentTime, -1);
+				CharSequence hoursRemaining = TimeParser.setHours(currentTime, -1);
 				hoursAmount.setText(hoursRemaining);
-
 			}
 		});
 
@@ -225,7 +257,7 @@ public class RecipeActivity extends Activity {
 		minutesIncreaseButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				int currentTime = Integer.parseInt((String) minutesAmount.getText().toString());
-				minutesRemaining = TimeParser.setMinutes(currentTime, 1);
+				CharSequence minutesRemaining = TimeParser.setMinutes(currentTime, 1);
 				minutesAmount.setText(minutesRemaining);
 			}
 		});
@@ -235,7 +267,7 @@ public class RecipeActivity extends Activity {
 		minutesDecreaseButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				int currentTime = Integer.parseInt((String) minutesAmount.getText().toString());
-				minutesRemaining = TimeParser.setMinutes(currentTime, -1);
+				CharSequence minutesRemaining = TimeParser.setMinutes(currentTime, -1);
 				minutesAmount.setText(minutesRemaining);
 			}
 		});
@@ -245,7 +277,7 @@ public class RecipeActivity extends Activity {
 		minutesIncreaseButtonPlus5.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				int currentTime = Integer.parseInt((String) minutesAmount.getText().toString());
-				minutesRemaining = TimeParser.setMinutes(currentTime, 5);
+				CharSequence minutesRemaining = TimeParser.setMinutes(currentTime, 5);
 				minutesAmount.setText(minutesRemaining);
 			}
 		});
@@ -255,7 +287,7 @@ public class RecipeActivity extends Activity {
 		minutesIncreaseButtonMinus5.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				int currentTime = Integer.parseInt((String) minutesAmount.getText().toString());
-				minutesRemaining = TimeParser.setMinutes(currentTime, -5);
+				CharSequence minutesRemaining = TimeParser.setMinutes(currentTime, -5);
 				minutesAmount.setText(minutesRemaining);
 			}
 		});
@@ -269,33 +301,50 @@ public class RecipeActivity extends Activity {
 				Editable currentNameEntry = editTextTitle.getText();
 				String currentNameSaved = currentNameEntry.toString();
 
-				/** get hours selected to save to DB and pass to intent */
-				Editable currentlyChosenHours = hoursAmount.getText();
-				String currentHoursSave = currentlyChosenHours.toString();
+				if (currentNameSaved.length() == 0) {
+					AlertDialog alertDialog = new AlertDialog.Builder(RecipeActivity.this).create();
+					alertDialog.setTitle("Enter a Title");
+					alertDialog.setMessage("Please enter a title for your timer preset");
+					alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {
+						}
+					});
+					alertDialog.setIcon(R.drawable.ic_launcher);
+					alertDialog.show();
+				} else {
+					/** get hours selected to save to DB and pass to intent */
+					Editable currentlyChosenHours = hoursAmount.getText();
+					String currentHoursSave = currentlyChosenHours.toString();
 
-				/** get minutes selected to save to DB and pass to intent */
-				Editable currentlyChosenMinutes = minutesAmount.getText();
-				String currentMinutesSave = currentlyChosenMinutes.toString();
+					/** get minutes selected to save to DB and pass to intent */
+					Editable currentlyChosenMinutes = minutesAmount.getText();
+					String currentMinutesSave = currentlyChosenMinutes.toString();
 
-				/** get time in minutes of the hours and minutes selected put together */
-				long currentTimeSaved = (long) Integer.parseInt(currentHoursSave) * 60;
-				currentTimeSaved = currentTimeSaved + (long) Integer.parseInt(currentMinutesSave);
+					/** get time in minutes of the hours and minutes selected put together */
+					long currentTimeSaved = (long) Integer.parseInt(currentHoursSave) * 60;
+					currentTimeSaved = currentTimeSaved + (long) Integer.parseInt(currentMinutesSave);
 
-				/** delete and add the item saved from the recipe selection */
-				try {
-					itemsDataSource.deleteItemByName(currentNameSaved);
-				} catch (Exception e) {
+					/** get the minutes of the timer to pass to the intent */
+					int minutesForTimer = (int) currentTimeSaved;
+
+					/** convert to milliseconds to save to the DB */
+					currentTimeSaved = currentTimeSaved * 60 * 1000;
+
+					/** delete and add the item saved from the recipe selection */
+					try {
+						itemsDataSource.deleteItemByName(currentNameSaved);
+					} catch (Exception e) {
+					}
+					try {
+						itemsDataSource.createItem(currentNameSaved, currentTimeSaved);
+					} catch (Exception e) {
+					}
+					/** begin the new timer setup with the user's selected recipe values */
+					Intent intent = new Intent(RecipeActivity.this, TimerActivity.class);
+					intent.putExtra("timeInMinutes", minutesForTimer);
+					intent.putExtra("timerTitle", currentNameSaved);
+					startActivity(intent);
 				}
-				try {
-					itemsDataSource.createItem(currentNameSaved, currentTimeSaved);
-				} catch (Exception e) {
-				}
-
-				/** begin the new timer setup with the user's selected recipe values */
-				Intent intent = new Intent(RecipeActivity.this, TimerActivity.class);
-				intent.putExtra("timeInMinutes", currentTimeSaved);
-				intent.putExtra("timerTitle", currentNameSaved);
-				startActivity(intent);
 			}
 		});
 	}
@@ -427,7 +476,7 @@ public class RecipeActivity extends Activity {
 							hoursIncreaseButton.setOnClickListener(new OnClickListener() {
 								public void onClick(View v) {
 									int currentTime = Integer.parseInt((String) hoursAmount.getText().toString());
-									hoursRemaining = TimeParser.setHours(currentTime, 1);
+									CharSequence hoursRemaining = TimeParser.setHours(currentTime, 1);
 									hoursAmount.setText(hoursRemaining);
 								}
 							});
@@ -437,7 +486,7 @@ public class RecipeActivity extends Activity {
 							hoursDecreaseButton.setOnClickListener(new OnClickListener() {
 								public void onClick(View v) {
 									int currentTime = Integer.parseInt((String) hoursAmount.getText().toString());
-									hoursRemaining = TimeParser.setHours(currentTime, -1);
+									CharSequence hoursRemaining = TimeParser.setHours(currentTime, -1);
 									hoursAmount.setText(hoursRemaining);
 
 								}
@@ -453,7 +502,7 @@ public class RecipeActivity extends Activity {
 							minutesIncreaseButton.setOnClickListener(new OnClickListener() {
 								public void onClick(View v) {
 									int currentTime = Integer.parseInt((String) minutesAmount.getText().toString());
-									minutesRemaining = TimeParser.setMinutes(currentTime, 1);
+									CharSequence minutesRemaining = TimeParser.setMinutes(currentTime, 1);
 									minutesAmount.setText(minutesRemaining);
 								}
 							});
@@ -463,7 +512,7 @@ public class RecipeActivity extends Activity {
 							minutesDecreaseButton.setOnClickListener(new OnClickListener() {
 								public void onClick(View v) {
 									int currentTime = Integer.parseInt((String) minutesAmount.getText().toString());
-									minutesRemaining = TimeParser.setMinutes(currentTime, -1);
+									CharSequence minutesRemaining = TimeParser.setMinutes(currentTime, -1);
 									minutesAmount.setText(minutesRemaining);
 								}
 							});
@@ -473,7 +522,7 @@ public class RecipeActivity extends Activity {
 							minutesIncreaseButtonPlus5.setOnClickListener(new OnClickListener() {
 								public void onClick(View v) {
 									int currentTime = Integer.parseInt((String) minutesAmount.getText().toString());
-									minutesRemaining = TimeParser.setMinutes(currentTime, 5);
+									CharSequence minutesRemaining = TimeParser.setMinutes(currentTime, 5);
 									minutesAmount.setText(minutesRemaining);
 								}
 							});
@@ -483,7 +532,7 @@ public class RecipeActivity extends Activity {
 							minutesIncreaseButtonMinus5.setOnClickListener(new OnClickListener() {
 								public void onClick(View v) {
 									int currentTime = Integer.parseInt((String) minutesAmount.getText().toString());
-									minutesRemaining = TimeParser.setMinutes(currentTime, -5);
+									CharSequence minutesRemaining = TimeParser.setMinutes(currentTime, -5);
 									minutesAmount.setText(minutesRemaining);
 								}
 							});
@@ -494,7 +543,7 @@ public class RecipeActivity extends Activity {
 								public void onClick(View v) {
 
 									/** delete and add the item saved from the recipe selection */
-									String currentNameDB = name + " " + style + " " + time;
+									String currentNameDB = name + " " + style;
 									long currentTimeDB = (long) (timeInMinutes * 60 * 1000);
 									try {
 										itemsDataSource.deleteItemByName(currentNameDB);
@@ -508,11 +557,7 @@ public class RecipeActivity extends Activity {
 									/** begin the new timer setup with the user's selected recipe values */
 									Intent intent = new Intent(RecipeActivity.this, TimerActivity.class);
 									intent.putExtra("timeInMinutes", timeInMinutes);
-									if (unit.equals("meal")) {
-										intent.putExtra("timerTitle", name + " " + style + " " + time);
-									} else {
-										intent.putExtra("timerTitle", name + " " + style + " " + time + "\n[per: " + unit + "]");
-									}
+									intent.putExtra("timerTitle", name + " " + style);
 									startActivity(intent);
 								}
 							});
