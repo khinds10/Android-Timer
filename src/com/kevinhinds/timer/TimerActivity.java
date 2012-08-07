@@ -25,6 +25,9 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 
@@ -42,6 +45,8 @@ public class TimerActivity extends Activity {
 	private PopupWindow pw;
 	private float degreesFrom = 0;
 	private Uri chosenRingtone = null;
+	private String timerTitle;
+	private String humanReadableTime;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -52,10 +57,9 @@ public class TimerActivity extends Activity {
 			/** get the searchType from the intent extras */
 			Bundle extras = getIntent().getExtras();
 			int timeInMinutes = extras.getInt("timeInMinutes");
-			String timerTitle = extras.getString("timerTitle");
+			timerTitle = extras.getString("timerTitle");
 			resumeMilliseconds = timeInMinutes * 60 * 1000;
-
-			String humanReadableTime = TimeParser.getHumanReadableTimeValue(resumeMilliseconds);
+			humanReadableTime = TimeParser.getHumanReadableTimeValue(resumeMilliseconds);
 
 			TextView mainTimerCount = (TextView) findViewById(R.id.mainTimerCount);
 			mainTimerCount.setText(humanReadableTime);
@@ -64,7 +68,9 @@ public class TimerActivity extends Activity {
 			currentTimerName.setText(timerTitle);
 
 		} catch (Exception e) {
+			timerTitle = "5 Minute Timer";
 			resumeMilliseconds = 5000 * 60;
+			humanReadableTime = TimeParser.getHumanReadableTimeValue(resumeMilliseconds);
 		}
 
 		/** setup the clicking sound */
@@ -75,6 +81,7 @@ public class TimerActivity extends Activity {
 		startButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				startTimer();
+				startNotification();
 			}
 		});
 
@@ -287,6 +294,24 @@ public class TimerActivity extends Activity {
 	}
 
 	/**
+	 * start a new notification because the timer is running
+	 */
+	private void startNotification() {
+
+		NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+		Notification notification = new Notification(R.drawable.ic_launcher, "Timer is Running", System.currentTimeMillis());
+
+		/** Hide the notification after its selected */
+		notification.flags |= Notification.FLAG_AUTO_CANCEL;
+
+		Intent intent = new Intent(this, TimerActivity.class);
+		PendingIntent activity = PendingIntent.getActivity(this, 0, intent, 0);
+		notification.setLatestEventInfo(this, timerTitle, humanReadableTime, activity);
+		notification.number += 1;
+		notificationManager.notify(0, notification);
+	}
+
+	/**
 	 * click the play sound checkBox and deal appropriately
 	 */
 	private void checkPlayClickSound() {
@@ -385,7 +410,6 @@ public class TimerActivity extends Activity {
 				int currentTime = Integer.parseInt((String) hoursAmount.getText().toString());
 				hoursRemaining = TimeParser.setHours(currentTime, -1);
 				hoursAmount.setText(hoursRemaining);
-
 			}
 		});
 
@@ -442,11 +466,12 @@ public class TimerActivity extends Activity {
 				resumeMilliseconds = (long) resumeMillisecondsLeft;
 				TextView mainTimerCount = (TextView) findViewById(R.id.mainTimerCount);
 
-				String humanReadableTime = TimeParser.getHumanReadableTimeValue(resumeMilliseconds);
+				humanReadableTime = TimeParser.getHumanReadableTimeValue(resumeMilliseconds);
 				mainTimerCount.setText(humanReadableTime);
 
 				TextView currentTimerName = (TextView) findViewById(R.id.currentTimerName);
-				currentTimerName.setText(humanReadableTime + " Timer");
+				timerTitle = humanReadableTime + " Timer";
+				currentTimerName.setText(timerTitle);
 
 				/** rotate the timer to the time selected */
 				rotateTimer((int) (resumeMillisecondsLeft / 1000 / 60));

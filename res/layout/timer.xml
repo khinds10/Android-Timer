@@ -21,6 +21,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:background="@drawable/custom_button"
+            android:minHeight="35dp"
             android:text="@string/Presets" />
 
         <TextView
@@ -38,6 +39,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:background="@drawable/custom_button"
+            android:minHeight="35dp"
+            android:minWidth="35dp"
             android:text="@string/set" />
     </LinearLayout>
 
@@ -53,6 +56,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:background="@drawable/custom_button"
+            android:minHeight="35dp"
             android:padding="10dp"
             android:text="@string/start"
             android:width="75dp" />
@@ -63,6 +67,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:background="@drawable/custom_button"
+            android:minHeight="35dp"
             android:padding="10dp"
             android:text="@string/stop"
             android:width="75dp" />
@@ -83,10 +88,10 @@
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:gravity="center_horizontal"
+            android:singleLine="true"
             android:text="@string/DefaultTimerName"
             android:textColor="#931624"
             android:textSize="15dp"
-            android:singleLine="true"
             android:textStyle="bold" />
     </LinearLayout>
 
@@ -125,4 +130,5 @@
                 android:src="@drawable/timer_dial" />
         </LinearLayout>
     </RelativeLayout>
+
 </LinearLayout>

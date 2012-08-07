@@ -75,6 +75,7 @@ public class RecipeActivity extends Activity {
 			tvPreset.setTextSize(15);
 			tvPreset.setText(Html.fromHtml("<b>" + (CharSequence) presetItem.getName() + "</b>"));
 			tvPreset.setLayoutParams(lpPreset);
+			tvPreset.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.timer_icon), null, null, null);
 			tvPreset.setClickable(true);
 			tvPreset.setPadding(5, 10, 0, 10);
 			tvPreset.setOnClickListener(new OnClickListener() {
@@ -87,8 +88,9 @@ public class RecipeActivity extends Activity {
 
 		/** add the create new preset option */
 		TextView tvPreset = new TextView(this);
-		tvPreset.setTextSize(20);
+		tvPreset.setTextSize(15);
 		tvPreset.setText((CharSequence) "Create New Preset...");
+		tvPreset.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.add), null, null, null);
 		tvPreset.setLayoutParams(lpPreset);
 		tvPreset.setClickable(true);
 		tvPreset.setId(1000);
@@ -292,7 +294,7 @@ public class RecipeActivity extends Activity {
 			}
 		});
 
-		/** save and start the timer selected from recipe */
+		/** save and start the timer selected from preset */
 		Button SaveButton = (Button) layout.findViewById(R.id.SaveButton);
 		SaveButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
@@ -312,6 +314,7 @@ public class RecipeActivity extends Activity {
 					alertDialog.setIcon(R.drawable.ic_launcher);
 					alertDialog.show();
 				} else {
+
 					/** get hours selected to save to DB and pass to intent */
 					Editable currentlyChosenHours = hoursAmount.getText();
 					String currentHoursSave = currentlyChosenHours.toString();
@@ -488,7 +491,6 @@ public class RecipeActivity extends Activity {
 									int currentTime = Integer.parseInt((String) hoursAmount.getText().toString());
 									CharSequence hoursRemaining = TimeParser.setHours(currentTime, -1);
 									hoursAmount.setText(hoursRemaining);
-
 								}
 							});
 
@@ -544,19 +546,37 @@ public class RecipeActivity extends Activity {
 
 									/** delete and add the item saved from the recipe selection */
 									String currentNameDB = name + " " + style;
-									long currentTimeDB = (long) (timeInMinutes * 60 * 1000);
+
+									/** get hours selected to save to DB and pass to intent */
+									Editable currentlyChosenHours = hoursAmount.getText();
+									String currentHoursSave = currentlyChosenHours.toString();
+
+									/** get minutes selected to save to DB and pass to intent */
+									Editable currentlyChosenMinutes = minutesAmount.getText();
+									String currentMinutesSave = currentlyChosenMinutes.toString();
+
+									/** get time in minutes of the hours and minutes selected put together */
+									long currentTimeSaved = (long) Integer.parseInt(currentHoursSave) * 60;
+									currentTimeSaved = currentTimeSaved + (long) Integer.parseInt(currentMinutesSave);
+
+									/** get the minutes of the timer to pass to the intent */
+									int minutesForTimer = (int) currentTimeSaved;
+
+									/** convert to milliseconds to save to the DB */
+									currentTimeSaved = currentTimeSaved * 60 * 1000;
+
 									try {
 										itemsDataSource.deleteItemByName(currentNameDB);
 									} catch (Exception e) {
 									}
 									try {
-										itemsDataSource.createItem(currentNameDB, currentTimeDB);
+										itemsDataSource.createItem(currentNameDB, currentTimeSaved);
 									} catch (Exception e) {
 									}
 
 									/** begin the new timer setup with the user's selected recipe values */
 									Intent intent = new Intent(RecipeActivity.this, TimerActivity.class);
-									intent.putExtra("timeInMinutes", timeInMinutes);
+									intent.putExtra("timeInMinutes", minutesForTimer);
 									intent.putExtra("timerTitle", name + " " + style);
 									startActivity(intent);
 								}

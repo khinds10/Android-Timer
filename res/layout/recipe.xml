@@ -33,6 +33,7 @@
             android:paddingLeft="5dp"
             android:paddingRight="10dp"
             android:scaleType="matrix"
+            android:contentDescription="@string/app_name"
             android:src="@drawable/ic_launcher" />
 
         <TextView
@@ -40,7 +41,7 @@
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:gravity="center_vertical"
-            android:text="Gourmet Timer"
+            android:text="@string/app_name"
             android:textColor="#FFFFFF"
             android:textSize="25dp" />
     </LinearLayout>
@@ -68,7 +69,7 @@
                 android:gravity="center_vertical"
                 android:paddingLeft="5dp"
                 android:paddingTop="25dp"
-                android:text="Select from Preset"
+                android:text="@string/SelectPreset"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
 
             <LinearLayout
@@ -85,7 +86,7 @@
                 android:gravity="center_vertical"
                 android:paddingLeft="5dp"
                 android:paddingTop="25dp"
-                android:text="Select from Recipe"
+                android:text="@string/SelectFromRecipe"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
 
             <LinearLayout

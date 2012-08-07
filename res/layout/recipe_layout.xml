@@ -21,7 +21,7 @@
             android:padding="5dp"
             android:paddingBottom="15dp"
             android:paddingRight="10dp"
-            android:text="Select from Recipe"
+            android:text="@string/SelectFromRecipe"
             android:textColor="#FFFFFF"
             android:textSize="18dp" />
 
@@ -94,7 +94,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingTop="10dp"
-            android:text="Suggested Time:" />
+            android:text="@string/SuggestedTime" />
 
         <TextView
             android:id="@+id/textViewSuggestedTimeValue"
@@ -136,6 +136,7 @@
                 android:layout_marginRight="10dp"
                 android:layout_weight="1"
                 android:background="@drawable/custom_button"
+                android:minHeight="35dp"
                 android:text="@string/minus1" >
             </Button>
 
@@ -147,6 +148,7 @@
                 android:layout_marginRight="10dp"
                 android:layout_weight="1"
                 android:background="@drawable/custom_button"
+                android:minHeight="35dp"
                 android:text="@string/plus1" />
         </LinearLayout>
 
@@ -181,6 +183,7 @@
                 android:layout_marginRight="5dp"
                 android:layout_weight="0.2"
                 android:background="@drawable/custom_button"
+                android:minHeight="35dp"
                 android:text="@string/minus5" />
 
             <Button
@@ -191,6 +194,7 @@
                 android:layout_marginRight="5dp"
                 android:layout_weight="0.2"
                 android:background="@drawable/custom_button"
+                android:minHeight="35dp"
                 android:text="@string/minus1" />
 
             <Button
@@ -201,6 +205,7 @@
                 android:layout_marginRight="5dp"
                 android:layout_weight="0.2"
                 android:background="@drawable/custom_button"
+                android:minHeight="35dp"
                 android:text="@string/plus1" />
 
             <Button
@@ -211,11 +216,12 @@
                 android:layout_marginRight="5dp"
                 android:layout_weight="0.2"
                 android:background="@drawable/custom_button"
+                android:minHeight="35dp"
                 android:text="@string/plus5" />
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/buttonContainer"
+            android:id="@+id/buttonContainer2"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:paddingTop="25dp" >
@@ -226,7 +232,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight=".5"
                 android:background="@drawable/custom_button"
-                android:text="Save &amp; Setup New Timer"
+                android:minHeight="35dp"
+                android:text="@string/Setup_TImer"
                 android:textSize="12dp" />
 
             <Button
@@ -235,7 +242,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight=".5"
                 android:background="@drawable/custom_button"
-                android:text="Back"
+                android:minHeight="35dp"
+                android:text="@string/Back"
                 android:textSize="12dp" />
         </LinearLayout>
     </LinearLayout>

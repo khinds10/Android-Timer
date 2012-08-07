@@ -22,6 +22,15 @@
     <string name="DefaultTimerName">00:05:00 Timer</string>
     <string name="lessThan">&lt;</string>
     <string name="Select">Select</string>
+    <string name="Setup_TImer">Save &amp; Setup New Timer</string>
+    <string name="Delete">Delete</string>
+    <string name="CreateEdit_Preset">Create/Edit Preset</string>
+    <string name="Hint_Title">Title [Ham, Potatoes]</string>
+	<string name="CurrentlySetTIme">Currently Set Time:</string>
+	<string name="SelectFromRecipe">Select from Recipe</string>
+	<string name="SuggestedTime">Suggested Time:</string>
+	<string name="Back">Back</string>
+	<string name="SelectPreset">Select from Preset</string>
 
     <string-array name="assetFilesArray">
         <item>Beef, Pork, Lamb, Mutton, Veal</item>

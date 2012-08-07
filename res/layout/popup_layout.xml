@@ -45,6 +45,7 @@
             android:layout_marginRight="10dp"
             android:layout_weight="1"
             android:background="@drawable/custom_button"
+            android:minHeight="35dp"
             android:text="@string/minus1" >
         </Button>
 
@@ -56,6 +57,7 @@
             android:layout_marginRight="10dp"
             android:layout_weight="1"
             android:background="@drawable/custom_button"
+            android:minHeight="35dp"
             android:text="@string/plus1" />
     </LinearLayout>
 
@@ -90,6 +92,7 @@
             android:layout_marginRight="5dp"
             android:layout_weight="0.2"
             android:background="@drawable/custom_button"
+            android:minHeight="35dp"
             android:text="@string/minus5" />
 
         <Button
@@ -100,6 +103,7 @@
             android:layout_marginRight="5dp"
             android:layout_weight="0.2"
             android:background="@drawable/custom_button"
+            android:minHeight="35dp"
             android:text="@string/minus1" />
 
         <Button
@@ -110,6 +114,7 @@
             android:layout_marginRight="5dp"
             android:layout_weight="0.2"
             android:background="@drawable/custom_button"
+            android:minHeight="35dp"
             android:text="@string/plus1" />
 
         <Button
@@ -120,6 +125,7 @@
             android:layout_marginRight="5dp"
             android:layout_weight="0.2"
             android:background="@drawable/custom_button"
+            android:minHeight="35dp"
             android:text="@string/plus5" />
     </LinearLayout>
 
@@ -135,6 +141,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.02"
             android:background="@drawable/custom_button"
+            android:minHeight="35dp"
             android:text="@string/Set_Timer" />
 
         <Button
@@ -143,6 +150,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.01"
             android:background="@drawable/custom_button"
+            android:minHeight="35dp"
             android:text="@string/Cancel" >
         </Button>
     </LinearLayout>
