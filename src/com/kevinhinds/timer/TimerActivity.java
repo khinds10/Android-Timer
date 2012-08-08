@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
@@ -47,6 +48,10 @@ public class TimerActivity extends Activity {
 	private Uri chosenRingtone = null;
 	private String timerTitle;
 	private String humanReadableTime;
+	private int screenHeight;
+	private int screenWidth;
+	private int dialHeight;
+	private int screenCenterPoint;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -72,6 +77,14 @@ public class TimerActivity extends Activity {
 			resumeMilliseconds = 5000 * 60;
 			humanReadableTime = TimeParser.getHumanReadableTimeValue(resumeMilliseconds);
 		}
+
+		/** get screen metrics */
+		DisplayMetrics displaymetrics = new DisplayMetrics();
+		getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+		screenHeight = displaymetrics.heightPixels;
+		screenWidth = displaymetrics.widthPixels;
+		dialHeight = screenHeight / 3;
+		screenCenterPoint = screenWidth / 2;
 
 		/** setup the clicking sound */
 		setupClickSound();
@@ -149,6 +162,75 @@ public class TimerActivity extends Activity {
 				chosenRingtone = null;
 			}
 		}
+	}
+
+	/**
+	 * capture a touch event to possibly move the timer
+	 */
+	public boolean onTouchEvent(MotionEvent event) {
+
+		/** get the touch event coordinates */
+		int eventaction = event.getAction();
+		float eventX = event.getX();
+		float eventY = event.getY();
+
+		/** if we've capture a touch action within the range of where the dial is */
+		if ((int) eventY > dialHeight) {
+
+			switch (eventaction) {
+
+			/** finger touches the screen */
+			case MotionEvent.ACTION_DOWN:
+				break;
+
+			/** finger moves on the screen */
+			case MotionEvent.ACTION_MOVE:
+
+				/** any current timer is now shutdown */
+				shutdownTimer();
+
+				/** right side of dial */
+				if (eventX > screenCenterPoint) {
+					
+					/** the calculations below are just trial and error, need a real algorithm */
+					float percent = (eventY / screenHeight) * 100;
+					float minutesPercent = (float) (percent - 40*1.2);
+					int minutesMove = (int) minutesPercent;
+					if (minutesMove < 0) {
+						minutesMove = 0;
+					}
+					if (minutesMove > 30) {
+						minutesMove = 30;
+					}
+					rotateTimer(minutesMove);
+				}
+
+				/** left side of dial */
+				if (eventX < screenCenterPoint) {
+					
+					/** the calculations below are just trial and error, need a real algorithm */
+					float percent = (eventY / screenHeight) * 100;
+					float minutesPercent = (float) (percent - 10*1.2);
+					int minutesMove = (int) minutesPercent;
+					if (minutesMove < 30) {
+						minutesMove = 30;
+					}
+					if (minutesMove > 59) {
+						minutesMove = 59;
+					}
+					rotateTimer(30-minutesMove);
+				}
+				break;
+
+			/** finger leaves the screen */
+			case MotionEvent.ACTION_UP:
+				// popup to confirm that you want to change to XXX time? or cancel which resume regular timer
+				break;
+			}
+		}
+
+		/** tell the system that we handled the event and no further processing is required */
+		return true;
 	}
 
 	/**
@@ -366,19 +448,13 @@ public class TimerActivity extends Activity {
 	 */
 	private void initiatePopupWindow() {
 
-		/** get screen metrics */
-		DisplayMetrics displaymetrics = new DisplayMetrics();
-		getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-		int height = displaymetrics.heightPixels;
-		int width = displaymetrics.widthPixels;
-
 		/** reset the hours and minutes remaining */
 		hoursRemaining = "0";
 		minutesRemaining = "0";
 
 		/** adjust the popup WxH */
-		float popupWidth = (float) (width * .75);
-		float popupHeight = (float) (height * .60);
+		float popupWidth = (float) (screenWidth * .85);
+		float popupHeight = (float) (screenHeight * .75);
 
 		/** We need to get the instance of the LayoutInflater, use the context of this activity */
 		LayoutInflater inflater = (LayoutInflater) TimerActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
