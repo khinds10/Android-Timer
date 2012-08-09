@@ -26,10 +26,12 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 
 public class TimerActivity extends Activity {
@@ -52,6 +54,8 @@ public class TimerActivity extends Activity {
 	private int screenWidth;
 	private int dialHeight;
 	private int screenCenterPoint;
+	int minutesMove = 0;
+	private int minutesConfirm;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -123,7 +127,7 @@ public class TimerActivity extends Activity {
 			}
 		});
 
-		rotateTimer(resumeMilliseconds / 1000 / 60);
+		rotateTimer(resumeMilliseconds / 1000 / 60, 500);
 	}
 
 	@Override
@@ -191,40 +195,78 @@ public class TimerActivity extends Activity {
 
 				/** right side of dial */
 				if (eventX > screenCenterPoint) {
-					
+
 					/** the calculations below are just trial and error, need a real algorithm */
 					float percent = (eventY / screenHeight) * 100;
-					float minutesPercent = (float) (percent - 40*1.2);
-					int minutesMove = (int) minutesPercent;
+					float minutesPercent = (float) (percent - 40 * 1.2);
+					minutesMove = (int) minutesPercent;
 					if (minutesMove < 0) {
 						minutesMove = 0;
 					}
 					if (minutesMove > 30) {
 						minutesMove = 30;
 					}
-					rotateTimer(minutesMove);
+					rotateTimer(minutesMove, 500);
 				}
 
 				/** left side of dial */
 				if (eventX < screenCenterPoint) {
-					
+
 					/** the calculations below are just trial and error, need a real algorithm */
 					float percent = (eventY / screenHeight) * 100;
-					float minutesPercent = (float) (percent - 10*1.2);
-					int minutesMove = (int) minutesPercent;
+					float minutesPercent = (float) (percent - 10 * 1.2);
+					minutesMove = (int) minutesPercent;
 					if (minutesMove < 30) {
 						minutesMove = 30;
 					}
 					if (minutesMove > 59) {
 						minutesMove = 59;
 					}
-					rotateTimer(30-minutesMove);
+					rotateTimer(30 - minutesMove, 500);
 				}
 				break;
 
 			/** finger leaves the screen */
 			case MotionEvent.ACTION_UP:
-				// popup to confirm that you want to change to XXX time? or cancel which resume regular timer
+
+				/** made up algorithm, need to clean this up */
+				minutesConfirm = minutesMove;
+				if (minutesConfirm > 30) {
+					minutesConfirm = 60 - minutesConfirm;
+					minutesConfirm = minutesConfirm + 30;
+				}
+
+				AlertDialog.Builder builder = new AlertDialog.Builder(TimerActivity.this);
+				builder.setTitle("Update Timer");
+				builder.setMessage("Update the current timer to " + Integer.toString(minutesConfirm) + " minutes?").setCancelable(false)
+						.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int id) {
+
+								int resumeMillisecondsLeft = minutesConfirm * 60 * 1000;
+								resumeMilliseconds = (long) resumeMillisecondsLeft;
+								TextView mainTimerCount = (TextView) findViewById(R.id.mainTimerCount);
+
+								humanReadableTime = TimeParser.getHumanReadableTimeValue(resumeMilliseconds);
+								mainTimerCount.setText(humanReadableTime);
+
+								TextView currentTimerName = (TextView) findViewById(R.id.currentTimerName);
+								timerTitle = humanReadableTime + " Timer";
+								currentTimerName.setText(timerTitle);
+
+								/** rotate the timer to the time selected */
+								rotateTimer((int) (resumeMillisecondsLeft / 1000 / 60), 0);
+								dialog.dismiss();
+							}
+						}).setNegativeButton("No", new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int id) {
+								/** rotate the timer to the time selected */
+								rotateTimer((int) (resumeMilliseconds / 1000 / 60), 0);
+								dialog.cancel();
+							}
+						});
+				builder.setIcon(R.drawable.ic_launcher);
+				AlertDialog alert = builder.create();
+				alert.show();
 				break;
 			}
 		}
@@ -239,7 +281,7 @@ public class TimerActivity extends Activity {
 	 * @param minutesToGo
 	 *            how many minutes to rotate the timer too
 	 */
-	private void rotateTimer(float minutesToGo) {
+	private void rotateTimer(float minutesToGo, int duration) {
 
 		/** if over an hour then it's just the remainder on the dial */
 		if (minutesToGo > 60) {
@@ -253,7 +295,7 @@ public class TimerActivity extends Activity {
 		ImageView timerDial = (ImageView) findViewById(R.id.dialImage);
 		RotateAnimation rAnim = new RotateAnimation(degreesFrom, degreesTo, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
 		rAnim.setFillAfter(true);
-		rAnim.setDuration(500);
+		rAnim.setDuration(duration);
 		timerDial.startAnimation(rAnim);
 		degreesFrom = degreesTo;
 	}
@@ -317,7 +359,7 @@ public class TimerActivity extends Activity {
 				if (rotateToTime == 1) {
 					rotateToTime = 0;
 				}
-				rotateTimer(rotateToTime);
+				rotateTimer(rotateToTime, 500);
 			}
 
 			/**
@@ -550,7 +592,7 @@ public class TimerActivity extends Activity {
 				currentTimerName.setText(timerTitle);
 
 				/** rotate the timer to the time selected */
-				rotateTimer((int) (resumeMillisecondsLeft / 1000 / 60));
+				rotateTimer((int) (resumeMillisecondsLeft / 1000 / 60), 500);
 				pw.dismiss();
 			}
 		});
