@@ -62,190 +62,195 @@
         </LinearLayout>
     </ScrollView>
 
-    <LinearLayout
-        android:id="@+id/recipeFormContainer"
+    <ScrollView
+        android:id="@+id/scrollView1"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="10dp"
-        android:visibility="gone" >
-
-        <TextView
-            android:id="@+id/editTextTitle"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="10dp"
-            android:textSize="22dp"
-            android:textStyle="bold" >
-        </TextView>
-
-        <TextView
-            android:id="@+id/editTextStyle"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="10dp"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:paddingTop="10dp"
-            android:textSize="20dp" />
-
-        <TextView
-            android:id="@+id/textViewSuggestedTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingTop="10dp"
-            android:text="@string/SuggestedTime" />
-
-        <TextView
-            android:id="@+id/textViewSuggestedTimeValue"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingLeft="12dp"
-            android:textColor="#931624"
-            android:textSize="15dp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingTop="10dp"
-            android:text="@string/Hours"
-            android:textColor="#000000"
-            android:textSize="14dp" />
-
-        <EditText
-            android:id="@+id/hoursAmount"
-            android:layout_width="75dp"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:focusable="false"
-            android:inputType="number"
-            android:text="@string/zeroInt" >
-        </EditText>
+        android:layout_height="wrap_content" >
 
         <LinearLayout
-            android:id="@+id/hoursButtonContainer"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" >
-
-            <Button
-                android:id="@+id/hoursDecreaseButton"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_weight="1"
-                android:background="@drawable/custom_button"
-                android:minHeight="35dp"
-                android:text="@string/minus1" >
-            </Button>
-
-            <Button
-                android:id="@+id/hoursIncreaseButton"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_weight="1"
-                android:background="@drawable/custom_button"
-                android:minHeight="35dp"
-                android:text="@string/plus1" />
-        </LinearLayout>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingTop="5dp"
-            android:text="@string/Minutes"
-            android:textColor="#000000"
-            android:textSize="14dp" />
-
-        <EditText
-            android:id="@+id/minutesAmount"
-            android:layout_width="75dp"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:focusable="false"
-            android:inputType="number"
-            android:text="@string/zeroInt" >
-        </EditText>
-
-        <LinearLayout
-            android:id="@+id/minutesButtonContainer"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" >
-
-            <Button
-                android:id="@+id/minutesIncreaseButtonMinus5"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_weight="0.2"
-                android:background="@drawable/custom_button"
-                android:minHeight="35dp"
-                android:text="@string/minus5" />
-
-            <Button
-                android:id="@+id/minutesDecreaseButton"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_weight="0.2"
-                android:background="@drawable/custom_button"
-                android:minHeight="35dp"
-                android:text="@string/minus1" />
-
-            <Button
-                android:id="@+id/minutesIncreaseButton"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_weight="0.2"
-                android:background="@drawable/custom_button"
-                android:minHeight="35dp"
-                android:text="@string/plus1" />
-
-            <Button
-                android:id="@+id/minutesIncreaseButtonPlus5"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_weight="0.2"
-                android:background="@drawable/custom_button"
-                android:minHeight="35dp"
-                android:text="@string/plus5" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/buttonContainer2"
+            android:id="@+id/recipeFormContainer"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="25dp" >
+            android:orientation="vertical"
+            android:padding="10dp"
+            android:visibility="gone" >
 
-            <Button
-                android:id="@+id/SaveButton"
+            <TextView
+                android:id="@+id/editTextTitle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:singleLine="true"
+                android:textSize="22dp"
+                android:textStyle="bold" >
+            </TextView>
+
+            <TextView
+                android:id="@+id/editTextStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:singleLine="true"
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/textViewSuggestedTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight=".5"
-                android:background="@drawable/custom_button"
-                android:minHeight="35dp"
-                android:text="@string/Setup_TImer"
-                android:textSize="12dp" />
+                android:paddingTop="10dp"
+                android:text="@string/SuggestedTime" />
 
-            <Button
-                android:id="@+id/BackButton"
+            <TextView
+                android:id="@+id/textViewSuggestedTimeValue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight=".5"
-                android:background="@drawable/custom_button"
-                android:minHeight="35dp"
-                android:text="@string/Back"
-                android:textSize="12dp" />
+                android:paddingLeft="12dp"
+                android:textColor="#931624"
+                android:textSize="15dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:text="@string/Hours"
+                android:textColor="#000000"
+                android:textSize="14dp" />
+
+            <EditText
+                android:id="@+id/hoursAmount"
+                android:layout_width="75dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:focusable="false"
+                android:inputType="number"
+                android:text="@string/zeroInt" >
+            </EditText>
+
+            <LinearLayout
+                android:id="@+id/hoursButtonContainer"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" >
+
+                <Button
+                    android:id="@+id/hoursDecreaseButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/custom_button"
+                    android:minHeight="35dp"
+                    android:text="@string/minus1" >
+                </Button>
+
+                <Button
+                    android:id="@+id/hoursIncreaseButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/custom_button"
+                    android:minHeight="35dp"
+                    android:text="@string/plus1" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:text="@string/Minutes"
+                android:textColor="#000000"
+                android:textSize="14dp" />
+
+            <EditText
+                android:id="@+id/minutesAmount"
+                android:layout_width="75dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:focusable="false"
+                android:inputType="number"
+                android:text="@string/zeroInt" >
+            </EditText>
+
+            <LinearLayout
+                android:id="@+id/minutesButtonContainer"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" >
+
+                <Button
+                    android:id="@+id/minutesIncreaseButtonMinus5"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="0.2"
+                    android:background="@drawable/custom_button"
+                    android:minHeight="35dp"
+                    android:text="@string/minus5" />
+
+                <Button
+                    android:id="@+id/minutesDecreaseButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="0.2"
+                    android:background="@drawable/custom_button"
+                    android:minHeight="35dp"
+                    android:text="@string/minus1" />
+
+                <Button
+                    android:id="@+id/minutesIncreaseButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="0.2"
+                    android:background="@drawable/custom_button"
+                    android:minHeight="35dp"
+                    android:text="@string/plus1" />
+
+                <Button
+                    android:id="@+id/minutesIncreaseButtonPlus5"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="0.2"
+                    android:background="@drawable/custom_button"
+                    android:minHeight="35dp"
+                    android:text="@string/plus5" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/buttonContainer2"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="25dp" >
+
+                <Button
+                    android:id="@+id/SaveButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".5"
+                    android:background="@drawable/custom_button"
+                    android:minHeight="35dp"
+                    android:text="@string/Setup_TImer"
+                    android:textSize="12dp" />
+
+                <Button
+                    android:id="@+id/BackButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".5"
+                    android:background="@drawable/custom_button"
+                    android:minHeight="35dp"
+                    android:text="@string/Back"
+                    android:textSize="12dp" />
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

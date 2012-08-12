@@ -495,8 +495,8 @@ public class TimerActivity extends Activity {
 		minutesRemaining = "0";
 
 		/** adjust the popup WxH */
-		float popupWidth = (float) (screenWidth * .85);
-		float popupHeight = (float) (screenHeight * .75);
+		float popupWidth = (float) (screenWidth * .90);
+		float popupHeight = (float) (screenHeight * .90);
 
 		/** We need to get the instance of the LayoutInflater, use the context of this activity */
 		LayoutInflater inflater = (LayoutInflater) TimerActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
