@@ -30,14 +30,27 @@ public class ItemsDataSource {
 		dbHelper = new MySQLiteHelper(context);
 	}
 
+	/**
+	 * open a connection to the datasource
+	 * @throws SQLException
+	 */
 	public void open() throws SQLException {
 		database = dbHelper.getWritableDatabase();
 	}
 
+	/**
+	 * close a connection to the datasource
+	 */
 	public void close() {
 		dbHelper.close();
 	}
 
+	/**
+	 * create a new item by associated values
+	 * @param name
+	 * @param milliseconds
+	 * @return
+	 */
 	public Item createItem(String name, long milliseconds) {
 
 		ContentValues values = new ContentValues();
@@ -52,12 +65,20 @@ public class ItemsDataSource {
 		return newItem;
 	}
 
+	/**
+	 * delete item by identifier
+	 * @param item
+	 */
 	public void deleteItem(Item item) {
 		long id = item.getId();
 		System.out.println("Item deleted with id: " + id);
 		database.delete(MySQLiteHelper.TABLE_ITEM, MySQLiteHelper.COLUMN_ID + " = " + id, null);
 	}
 
+	/**
+	 * delete item by its name
+	 * @param name
+	 */
 	public void deleteItemByName(String name) {
 		System.out.println("Item deleted with name: " + name);
 		try {
@@ -66,6 +87,11 @@ public class ItemsDataSource {
 		}
 	}
 
+	/**
+	 * get item by ID
+	 * @param id
+	 * @return
+	 */
 	public Item getById(long id) {
 		Cursor cursor = database.rawQuery("select * from " + MySQLiteHelper.TABLE_ITEM + " where " + MySQLiteHelper.COLUMN_ID + "='" + id + "'", null);
 		cursor.moveToFirst();
@@ -73,6 +99,10 @@ public class ItemsDataSource {
 		return item;
 	}
 
+	/**
+	 * get all items in a list from datasource
+	 * @return
+	 */
 	public List<Item> getAllItems() {
 		List<Item> items = new ArrayList<Item>();
 
@@ -88,6 +118,11 @@ public class ItemsDataSource {
 		return items;
 	}
 
+	/**
+	 * point the datasource cursor to the item in question
+	 * @param cursor
+	 * @return
+	 */
 	private Item cursorToItem(Cursor cursor) {
 		Item item = new Item();
 		item.setId(cursor.getLong(0));

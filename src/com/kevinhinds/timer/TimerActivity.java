@@ -62,6 +62,7 @@ public class TimerActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.timer);
 
+		/** determine if we've arrived at the TimerActivity from the presets activity or a launcher activity */
 		try {
 			/** get the searchType from the intent extras */
 			Bundle extras = getIntent().getExtras();
@@ -110,14 +111,16 @@ public class TimerActivity extends Activity {
 			}
 		});
 
+		/** click the set button */
 		Button setButton = (Button) findViewById(R.id.setButton);
 		setButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				shutdownTimer();
-				initiatePopupWindow();
+				initiateSetTimerPopupWindow();
 			}
 		});
 
+		/** click the presets button to move to the next activity */
 		Button presetsButton = (Button) findViewById(R.id.presetsButton);
 		presetsButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
@@ -127,9 +130,11 @@ public class TimerActivity extends Activity {
 			}
 		});
 
+		/** rotate the timer to begin with when this activity starts */
 		rotateTimer(resumeMilliseconds / 1000 / 60, 500);
 	}
 
+	/** inflate the menu button menu to show to the user */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
@@ -137,6 +142,7 @@ public class TimerActivity extends Activity {
 		return true;
 	}
 
+	/** handle user selecting a menu item */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
@@ -155,6 +161,7 @@ public class TimerActivity extends Activity {
 		return true;
 	}
 
+	/** start the activity for a result for a "ringtone" picker with the "type" being "notification" */
 	@Override
 	protected void onActivityResult(final int requestCode, final int resultCode, final Intent intent) {
 		if (resultCode == Activity.RESULT_OK && requestCode == 5) {
@@ -236,6 +243,7 @@ public class TimerActivity extends Activity {
 					minutesConfirm = minutesConfirm + 30;
 				}
 
+				/** the person has stopped moving the timer dial, ask to confirm if to set the timer to that time */
 				AlertDialog.Builder builder = new AlertDialog.Builder(TimerActivity.this);
 				builder.setTitle("Update Timer");
 				builder.setMessage("Update the current timer to " + Integer.toString(minutesConfirm) + " minutes?").setCancelable(false)
@@ -486,9 +494,9 @@ public class TimerActivity extends Activity {
 	}
 
 	/**
-	 * show the popup window
+	 * show the popup window for the "set" timer preset
 	 */
-	private void initiatePopupWindow() {
+	private void initiateSetTimerPopupWindow() {
 
 		/** reset the hours and minutes remaining */
 		hoursRemaining = "0";
@@ -575,6 +583,7 @@ public class TimerActivity extends Activity {
 			}
 		});
 
+		/** set button is pressed, set the timer and close the popup */
 		Button setButton = (Button) layout.findViewById(R.id.setButton);
 		setButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {

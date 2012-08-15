@@ -54,6 +54,7 @@ public class RecipeActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.recipe);
+		
 		/** get the string resources to get the menuValues array */
 		Resources res = getResources();
 		final String[] menuValues = res.getStringArray(R.array.assetFilesArray);
@@ -130,7 +131,7 @@ public class RecipeActivity extends Activity {
 			llRecipe.addView(tv);
 		}
 
-		/** icon returns to home screen */
+		/** icon press returns to home screen */
 		ImageView imageViewIcon = (ImageView) findViewById(R.id.imageViewIcon);
 		imageViewIcon.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
@@ -183,9 +184,8 @@ public class RecipeActivity extends Activity {
 			}
 		});
 
-		Button DeleteButton = (Button) layout.findViewById(R.id.DeleteButton);
-
 		/** get the current item selected, if a "create new preset..." option is selected, then it's just an empty item */
+		Button DeleteButton = (Button) layout.findViewById(R.id.DeleteButton);
 		currentItem = new Item();
 		if (id == 1000) {
 			currentItem.setName("");
@@ -195,6 +195,7 @@ public class RecipeActivity extends Activity {
 			currentItem = itemsDataSource.getById(id);
 		}
 
+		/** delete button is pressed confirm handler */
 		DeleteButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				AlertDialog.Builder builder = new AlertDialog.Builder(RecipeActivity.this);
@@ -217,9 +218,12 @@ public class RecipeActivity extends Activity {
 				alert.show();
 			}
 		});
+		
+		/** set the title from the item's datasource */
 		final EditText editTextTitle = (EditText) layout.findViewById(R.id.editTextTitle);
 		editTextTitle.setText(currentItem.getName());
 
+		/** set the suggested time for this preset */
 		TextView textViewSuggestedTimeValue = (TextView) layout.findViewById(R.id.textViewSuggestedTimeValue);
 		textViewSuggestedTimeValue.setText(TimeParser.getHumanReadableTimeValue(currentItem.getMilliseconds()));
 		int presetTimeInMinutes = (int) (currentItem.getMilliseconds() / 1000 / 60);
@@ -303,6 +307,7 @@ public class RecipeActivity extends Activity {
 				Editable currentNameEntry = editTextTitle.getText();
 				String currentNameSaved = currentNameEntry.toString();
 
+				/** if the name of the preset is empty then display popup informing the user */
 				if (currentNameSaved.length() == 0) {
 					AlertDialog alertDialog = new AlertDialog.Builder(RecipeActivity.this).create();
 					alertDialog.setTitle("Enter a Title");

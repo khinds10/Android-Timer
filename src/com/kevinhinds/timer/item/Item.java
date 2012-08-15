@@ -10,26 +10,50 @@ public class Item {
 	public String name;
 	public long milliseconds;
 	
+	/**
+	 * get ID
+	 * @return
+	 */
 	public long getId() {
 		return id;
 	}
 
+	/**
+	 * set ID
+	 * @param id
+	 */
 	public void setId(long id) {
 		this.id = id;
 	}
 
+	/**
+	 * get name
+	 * @return
+	 */
 	public String getName() {
 		return name;
 	}
 
+	/**
+	 * set name
+	 * @param name
+	 */
 	public void setName(String name) {
 		this.name = name;
 	}
 
+	/**
+	 * get milliseconds
+	 * @return
+	 */
 	public long getMilliseconds() {
 		return milliseconds;
 	}
 
+	/**
+	 * set milliseconds
+	 * @param milliseconds
+	 */
 	public void setMilliseconds(long milliseconds) {
 		this.milliseconds = milliseconds;
 	}
