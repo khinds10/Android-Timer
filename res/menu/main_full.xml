@@ -1,0 +1,16 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/clicking"
+        android:icon="@drawable/clicking_on_off"
+        android:title="Turn on/off clicking"/>
+    <item
+        android:id="@+id/chooseAlarm"
+        android:icon="@drawable/alarm_sound"
+        android:title="Change Timer Alarm"/>
+    <item
+        android:id="@+id/menu_bitstreet"
+        android:orderInCategory="100"
+        android:title="@string/menu_bitstreet"/>
+
+</menu>

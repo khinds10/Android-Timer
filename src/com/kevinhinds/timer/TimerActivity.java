@@ -1,6 +1,8 @@
 package com.kevinhinds.timer;
 
+import com.kevinhinds.timer.marketplace.MarketPlace;
 import com.kevinhinds.timer.sound.SoundManager;
+import com.kevinhinds.timer.updates.LatestUpdates;
 
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -76,10 +78,9 @@ public class TimerActivity extends Activity {
 
 			TextView currentTimerName = (TextView) findViewById(R.id.currentTimerName);
 			currentTimerName.setText(timerTitle);
-
 		} catch (Exception e) {
-			timerTitle = "5 Minute Timer";
-			resumeMilliseconds = 5000 * 60;
+			timerTitle = "15 Minute Timer";
+			resumeMilliseconds = 15000 * 60;
 			humanReadableTime = TimeParser.getHumanReadableTimeValue(resumeMilliseconds);
 		}
 
@@ -132,33 +133,12 @@ public class TimerActivity extends Activity {
 
 		/** rotate the timer to begin with when this activity starts */
 		rotateTimer(resumeMilliseconds / 1000 / 60, 500);
-	}
 
-	/** inflate the menu button menu to show to the user */
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.menu, menu);
-		return true;
-	}
+		/** play winder sound the time is set! */
+		playWinder();
 
-	/** handle user selecting a menu item */
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case R.id.clicking:
-			clickSoundShouldPlay = !clickSoundShouldPlay;
-			checkPlayClickSound();
-			break;
-		case R.id.chooseAlarm:
-			Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
-			intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION);
-			intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, "Select Tone");
-			intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, (CharSequence) null);
-			this.startActivityForResult(intent, 5);
-			break;
-		}
-		return true;
+		/** show the latest update notes if the application was just installed */
+		LatestUpdates.showFirstInstalledNotes(this);
 	}
 
 	/** start the activity for a result for a "ringtone" picker with the "type" being "notification" */
@@ -192,6 +172,8 @@ public class TimerActivity extends Activity {
 
 			/** finger touches the screen */
 			case MotionEvent.ACTION_DOWN:
+				/** play the winding sound because you touched the dial! */
+				playWinder();
 				break;
 
 			/** finger moves on the screen */
@@ -380,6 +362,41 @@ public class TimerActivity extends Activity {
 				playRinger();
 			}
 		}.start();
+	}
+
+	/**
+	 * play the winder sound because the timer has been moved
+	 */
+	private void playWinder() {
+
+		/** there's a bug with Android Sound Manager, create a new thread and .5 seconds out play the ringer sound */
+		mSoundManagerRinger = new SoundManager();
+		mSoundManagerRinger.initSounds(this);
+		mSoundManagerRinger.addSound(1, R.raw.winding);
+
+		/** play the ringer sound after .5 seconds on this thread */
+		Thread thread = new Thread() {
+			@Override
+			public void run() {
+				try {
+					synchronized (this) {
+						wait(500);
+					}
+				} catch (InterruptedException ex) {
+				}
+
+				if (chosenRingtone == null) {
+					mSoundManagerRinger.playSound(1);
+				} else {
+					try {
+						Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), chosenRingtone);
+						r.play();
+					} catch (Exception e) {
+					}
+				}
+			}
+		};
+		thread.start();
 	}
 
 	/**
@@ -603,6 +620,9 @@ public class TimerActivity extends Activity {
 				/** rotate the timer to the time selected */
 				rotateTimer((int) (resumeMillisecondsLeft / 1000 / 60), 500);
 				pw.dismiss();
+
+				/** play winder sound because the timer has moved! */
+				playWinder();
 			}
 		});
 
@@ -622,5 +642,65 @@ public class TimerActivity extends Activity {
 	protected void onDestroy() {
 		super.onDestroy();
 		mSoundManager.stopSound(1);
+	}
+
+	/** create the main menu based on if the app is the full version or not */
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		String isFullVersion = getResources().getString(R.string.is_full_version);
+		if (isFullVersion.toLowerCase().equals("true")) {
+			getMenuInflater().inflate(R.menu.main_full, menu);
+		} else {
+			getMenuInflater().inflate(R.menu.main, menu);
+		}
+		return true;
+	}
+
+	/** handle user selecting a menu item */
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+
+		switch (item.getItemId()) {
+		case R.id.clicking:
+			clickSoundShouldPlay = !clickSoundShouldPlay;
+			checkPlayClickSound();
+			break;
+		case R.id.chooseAlarm:
+			Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
+			intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION);
+			intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, "Select Tone");
+			intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, (CharSequence) null);
+			this.startActivityForResult(intent, 5);
+			break;
+		case R.id.menu_bitstreet:
+			viewAllPublisherApps();
+			break;
+		case R.id.menu_fullversion:
+			viewPremiumApp();
+			break;
+		}
+		return true;
+	}
+
+	/**
+	 * view all apps on the device marketplace for current publisher
+	 */
+	public void viewAllPublisherApps() {
+		MarketPlace marketPlace = new MarketPlace(this);
+		Intent intent = marketPlace.getViewAllPublisherAppsIntent(this);
+		if (intent != null) {
+			startActivity(intent);
+		}
+	}
+
+	/**
+	 * view the premium version of this app
+	 */
+	public void viewPremiumApp() {
+		MarketPlace marketPlace = new MarketPlace(this);
+		Intent intent = marketPlace.getViewPremiumAppIntent(this);
+		if (intent != null) {
+			startActivity(intent);
+		}
 	}
 }
