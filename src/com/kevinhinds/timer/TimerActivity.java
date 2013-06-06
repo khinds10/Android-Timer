@@ -384,16 +384,7 @@ public class TimerActivity extends Activity {
 					}
 				} catch (InterruptedException ex) {
 				}
-
-				if (chosenRingtone == null) {
-					mSoundManagerRinger.playSound(1);
-				} else {
-					try {
-						Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), chosenRingtone);
-						r.play();
-					} catch (Exception e) {
-					}
-				}
+				mSoundManagerRinger.playSound(1);				
 			}
 		};
 		thread.start();
