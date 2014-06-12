@@ -12,8 +12,8 @@
     <string name="marketplace_name">Google</string> <!-- Amazon|Nook|Google -->
 
     <!-- PollFish -->
-    <string name="pollfish_enabled">true</string>
-    <string name="pollfish_api_key">8151b8cd-ace6-402c-b360-e4b7d360cb97</string>
+    <string name="pollfish_enabled">false</string>
+    <string name="pollfish_api_key">dfe6b3e3-7614-4c3f-8a20-4d08f2585b77</string>
 
     <!-- Suggested App Package -->
     <string name="has_suggested_app">false</string>
