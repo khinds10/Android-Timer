@@ -1,5 +1,7 @@
 package com.kevinhinds.timer;
 
+import com.pollfish.main.PollFish;
+import com.pollfish.constants.Position;
 import com.kevinhinds.timer.marketplace.MarketPlace;
 import com.kevinhinds.timer.sound.SoundManager;
 import com.kevinhinds.timer.updates.LatestUpdates;
@@ -34,6 +36,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 
 public class TimerActivity extends Activity {
 	private com.kevinhinds.timer.sound.SoundManager mSoundManager;
@@ -63,7 +66,10 @@ public class TimerActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.timer);
 
-		/** determine if we've arrived at the TimerActivity from the presets activity or a launcher activity */
+		/**
+		 * determine if we've arrived at the TimerActivity from the presets activity or a launcher
+		 * activity
+		 */
 		try {
 			/** get the searchType from the intent extras */
 			Bundle extras = getIntent().getExtras();
@@ -138,6 +144,22 @@ public class TimerActivity extends Activity {
 
 		/** show the latest update notes if the application was just installed */
 		LatestUpdates.showFirstInstalledNotes(this);
+	}
+
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+		if (Boolean.parseBoolean(getResources().getString(R.string.pollfish_enabled))) {
+			PollFish.init(this, getString(R.string.pollfish_api_key), Position.BOTTOM_RIGHT, 5);
+		}
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		if (Boolean.parseBoolean(getResources().getString(R.string.pollfish_enabled))) {
+			PollFish.init(this, getString(R.string.pollfish_api_key), Position.BOTTOM_LEFT, 5);
+		}
 	}
 
 	/** start the activity for a result for a "ringtone" picker with the "type" being "notification" */
@@ -224,7 +246,10 @@ public class TimerActivity extends Activity {
 					minutesConfirm = minutesConfirm + 30;
 				}
 
-				/** the person has stopped moving the timer dial, ask to confirm if to set the timer to that time */
+				/**
+				 * the person has stopped moving the timer dial, ask to confirm if to set the timer
+				 * to that time
+				 */
 				AlertDialog.Builder builder = new AlertDialog.Builder(TimerActivity.this);
 				builder.setTitle("Update Timer");
 				builder.setMessage("Update the current timer to " + Integer.toString(minutesConfirm) + " minutes?").setCancelable(false)
@@ -305,7 +330,8 @@ public class TimerActivity extends Activity {
 	private void startTimer() {
 
 		/**
-		 * create a new instance of the Android Countdown timer if another timer is running, cancel it
+		 * create a new instance of the Android Countdown timer if another timer is running, cancel
+		 * it
 		 */
 		shutdownTimer();
 
@@ -315,7 +341,10 @@ public class TimerActivity extends Activity {
 		/** resume the clicking sound if should play sound is true */
 		if (clickSoundShouldPlay) {
 
-			/** there's a bug with Android Sound Manager, create a new thread and 1 second out resume the clicking sound */
+			/**
+			 * there's a bug with Android Sound Manager, create a new thread and 1 second out resume
+			 * the clicking sound
+			 */
 			Thread thread = new Thread() {
 				@Override
 				public void run() {
@@ -368,7 +397,10 @@ public class TimerActivity extends Activity {
 	 */
 	private void playWinder() {
 
-		/** there's a bug with Android Sound Manager, create a new thread and .5 seconds out play the ringer sound */
+		/**
+		 * there's a bug with Android Sound Manager, create a new thread and .5 seconds out play the
+		 * ringer sound
+		 */
 		mSoundManagerRinger = new SoundManager();
 		mSoundManagerRinger.initSounds(this);
 		mSoundManagerRinger.addSound(1, R.raw.winding);
@@ -383,7 +415,7 @@ public class TimerActivity extends Activity {
 					}
 				} catch (InterruptedException ex) {
 				}
-				mSoundManagerRinger.playSound(1);				
+				mSoundManagerRinger.playSound(1);
 			}
 		};
 		thread.start();
@@ -394,7 +426,10 @@ public class TimerActivity extends Activity {
 	 */
 	private void playRinger() {
 
-		/** there's a bug with Android Sound Manager, create a new thread and 1 second out play the ringer sound */
+		/**
+		 * there's a bug with Android Sound Manager, create a new thread and 1 second out play the
+		 * ringer sound
+		 */
 		mSoundManagerRinger = new SoundManager();
 		mSoundManagerRinger.initSounds(this);
 		mSoundManagerRinger.addSound(1, R.raw.ringing);
@@ -634,15 +669,19 @@ public class TimerActivity extends Activity {
 		mSoundManager.stopSound(1);
 	}
 
+	/** make parts of the menu invisible based on settings */
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		super.onPrepareOptionsMenu(menu);
+		menu.findItem(R.id.menu_fullversion).setVisible(!Boolean.parseBoolean(getResources().getString(R.string.is_full_version)));
+		menu.findItem(R.id.menu_suggested).setVisible(Boolean.parseBoolean(getResources().getString(R.string.has_suggested_app)));
+		return true;
+	}
+
 	/** create the main menu based on if the app is the full version or not */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		String isFullVersion = getResources().getString(R.string.is_full_version);
-		if (isFullVersion.toLowerCase().equals("true")) {
-			getMenuInflater().inflate(R.menu.main_full, menu);
-		} else {
-			getMenuInflater().inflate(R.menu.main, menu);
-		}
+		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
 
@@ -663,34 +702,15 @@ public class TimerActivity extends Activity {
 			this.startActivityForResult(intent, 5);
 			break;
 		case R.id.menu_bitstreet:
-			viewAllPublisherApps();
+			MarketPlace.viewAllPublisherApps(this);
 			break;
 		case R.id.menu_fullversion:
-			viewPremiumApp();
+			MarketPlace.viewPremiumApp(this);
+			break;
+		case R.id.menu_suggested:
+			MarketPlace.viewSuggestedApp(this);
 			break;
 		}
 		return true;
-	}
-
-	/**
-	 * view all apps on the device marketplace for current publisher
-	 */
-	public void viewAllPublisherApps() {
-		MarketPlace marketPlace = new MarketPlace(this);
-		Intent intent = marketPlace.getViewAllPublisherAppsIntent(this);
-		if (intent != null) {
-			startActivity(intent);
-		}
-	}
-
-	/**
-	 * view the premium version of this app
-	 */
-	public void viewPremiumApp() {
-		MarketPlace marketPlace = new MarketPlace(this);
-		Intent intent = marketPlace.getViewPremiumAppIntent(this);
-		if (intent != null) {
-			startActivity(intent);
-		}
 	}
 }
