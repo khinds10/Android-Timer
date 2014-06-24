@@ -27,7 +27,7 @@
     <string name="app_publisher_name">Kevin Hinds</string>
     <string name="app_publisher_package">com.kevinhinds</string>
     <string name="menu_bitstreet">Bitstreet Apps</string>
-    <string name="menu_fullversion">Ad Free Version</string>
+    <string name="menu_fullversion">Ads Free Version</string>
     <string name="device_nook_ean_number">9999999999999</string>
 
 </resources>
