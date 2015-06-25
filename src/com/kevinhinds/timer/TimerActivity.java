@@ -5,6 +5,8 @@ import com.pollfish.constants.Position;
 import com.kevinhinds.timer.marketplace.MarketPlace;
 import com.kevinhinds.timer.sound.SoundManager;
 import com.kevinhinds.timer.updates.LatestUpdates;
+import com.google.android.gms.ads.*;
+import com.appjolt.winback.Winback;
 
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -37,6 +39,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.widget.RelativeLayout;
 
 public class TimerActivity extends Activity {
 	private com.kevinhinds.timer.sound.SoundManager mSoundManager;
@@ -65,6 +68,26 @@ public class TimerActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.timer);
+
+		/** Appjolt - Init SDK if it's Enabled */
+		if (Boolean.parseBoolean(getResources().getString(R.string.appjolt_enabled))) {
+			Winback.init(this);
+		}
+
+		/** Look up the AdView as a resource and load a request */
+		if (Boolean.parseBoolean(getResources().getString(R.string.admob_enabled))) {
+
+			/** setup the adMob Ad */
+			AdView adView = new AdView(this);
+			adView.setAdUnitId(getResources().getString(R.string.admob_ads_id));
+			adView.setAdSize(AdSize.BANNER);
+
+			/** apply it to the bottom of the screen */
+			RelativeLayout layout = (RelativeLayout) findViewById(R.id.adViewContainer);
+			layout.addView(adView);
+			AdRequest adRequest = new AdRequest.Builder().build();
+			adView.loadAd(adRequest);
+		}
 
 		/**
 		 * determine if we've arrived at the TimerActivity from the presets activity or a launcher
@@ -150,7 +173,7 @@ public class TimerActivity extends Activity {
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
 		if (Boolean.parseBoolean(getResources().getString(R.string.pollfish_enabled))) {
-			PollFish.init(this, getString(R.string.pollfish_api_key), Position.BOTTOM_LEFT, 5);
+			PollFish.init(this, getString(R.string.pollfish_api_key), Position.BOTTOM_RIGHT, 5);
 		}
 	}
 

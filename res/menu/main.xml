@@ -1,5 +1,4 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
-
     <item
         android:id="@+id/clicking"
         android:icon="@drawable/clicking_on_off"
@@ -20,5 +19,4 @@
         android:id="@+id/menu_suggested"
         android:orderInCategory="100"
         android:title="@string/suggested_app_menu"/>
-
 </menu>

@@ -13,12 +13,19 @@
 
     <!-- PollFish -->
     <string name="pollfish_enabled">false</string>
-    <string name="pollfish_api_key">dfe6b3e3-7614-4c3f-8a20-4d08f2585b77</string>
+    <string name="pollfish_api_key">3dca5fc1-6d0d-439f-8914-346cbe302de9</string>
+
+    <!-- AdsMob -->
+    <string name="admob_enabled">false</string>
+    <string name="admob_ads_id">ca-app-pub-6863280069736596/8669667841</string>
+
+    <!-- AppJolt -->
+    <string name="appjolt_enabled">false</string>
 
     <!-- Suggested App Package -->
-    <string name="has_suggested_app">false</string>
-    <string name="suggested_app_menu">New Free App!</string>
-    <string name="suggested_app_package">com.kevinhinds.sleeptube</string>
+    <string name="has_suggested_app">true</string>
+    <string name="suggested_app_menu">My New Free App!</string>
+    <string name="suggested_app_package">com.kevinhinds.sleeptubelite</string>
 
     <!-- Example: Latest Updates\n\nItem #1\nItem #2\n\nThanks for downloading! -->
     <string name="latest_update_notes">Latest Updates:\n\nNew Improved Sounds and Images\n\nThanks for downloading!</string>
@@ -28,6 +35,6 @@
     <string name="app_publisher_package">com.kevinhinds</string>
     <string name="menu_bitstreet">Bitstreet Apps</string>
     <string name="menu_fullversion">Ads Free Version</string>
-    <string name="device_nook_ean_number">9999999999999</string>
+    <string name="device_nook_ean_number">1234567890</string>
 
 </resources>

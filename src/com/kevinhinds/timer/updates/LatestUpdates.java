@@ -32,7 +32,6 @@ public class LatestUpdates {
 			versionCode = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionCode;
 		} catch (NameNotFoundException e) {
 			versionCode = 0;
-			showUpdateNotes = false;
 		}
 
 		/**
